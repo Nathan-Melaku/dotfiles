@@ -32,7 +32,8 @@ local plugins = {
       },
     },
   },
-  { "rose-pine/neovim",                name = "rose-pine" },
+  -- { "rose-pine/neovim",                name = "rose-pine" },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   { "nvim-treesitter/nvim-treesitter", cmd = "TSUpdate" },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
@@ -102,6 +103,10 @@ local plugins = {
   },
   {
     'NvChad/nvim-colorizer.lua',
+  },
+  {
+    "christoomey/vim-tmux-navigator",
+    lazy = false
   }
 
 }
