@@ -11,6 +11,7 @@ alias v="nvim"
 # plugins
 source "$HOME/.config/zsh/plugins.zsh"
 
+export PATH="$HOME/go/bin:$PATH"
 ####### Automatically created ####################
 # bun completions
 [ -s "/home/nathan/.bun/_bun" ] && source "/home/nathan/.bun/_bun"

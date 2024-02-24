@@ -73,6 +73,13 @@ local plugins = {
   { 'mfussenegger/nvim-jdtls' },
   { 'mfussenegger/nvim-dap' },
   {
+    "leoluz/nvim-dap-go",
+    ft = "go",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+  },
+  {
     "rcarriga/nvim-dap-ui",
     dependencies = { "mfussenegger/nvim-dap" }
   },
@@ -147,7 +154,16 @@ local plugins = {
     main = 'ibl',
     opts = {},
   },
+  {
+    "olexsmir/gopher.nvim",
+    ft = "go",
+    config = function (_, opts)
+      require("gopher").setup(opts)
+    end,
+    build = function ()
+      vim.cmd [[silent! GoInstallDeps]]
+    end
+  },
 
 }
-local opts =
-    require("lazy").setup(plugins, opts)
+local opts = require("lazy").setup(plugins, opts)
