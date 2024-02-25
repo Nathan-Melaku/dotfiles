@@ -1,2 +1,3 @@
 .config/tmux/plugins/**
+.config/tmux/**
 .config/zsh/plugins/**
