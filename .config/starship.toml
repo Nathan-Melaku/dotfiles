@@ -1,0 +1,18 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+format = '$directory$character'
+right_format = '$all'
+
+[character] 
+success_symbol = '[➜](bold green)' 
+error_symbol =	'[➜](bold red)'
+
+[package]
+disabled = true
+
+[golang]
+symbol = ' '
+
+[git_branch]
+symbol = ' '

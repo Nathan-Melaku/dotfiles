@@ -1,3 +1,4 @@
+
 # Created by newuser for 5.9
 eval "$(starship init zsh)"
 
@@ -10,6 +11,9 @@ alias v="nvim"
 
 # plugins
 source "$HOME/.config/zsh/plugins.zsh"
+
+autoload -U compinit; compinit
+zstyle ':completion:*' menu select
 
 export PATH="$HOME/go/bin:$PATH"
 ####### Automatically created ####################
