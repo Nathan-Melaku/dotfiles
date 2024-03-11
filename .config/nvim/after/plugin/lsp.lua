@@ -39,6 +39,7 @@ require('mason-lspconfig').setup({
     'htmx',
     'jsonls',
     'zls',
+    'clojure_lsp',
     'sqlls',
     'tailwindcss',
     'tsserver',

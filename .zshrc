@@ -12,10 +12,12 @@ alias v="nvim"
 # plugins
 source "$HOME/.config/zsh/plugins.zsh"
 
-autoload -U compinit; compinit
-zstyle ':completion:*' menu select
+#autoload -U compinit; compinit
+#zstyle ':completion:*' menu select
 
 export PATH="$HOME/go/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.emacs.d/bin:$PATH"
 ####### Automatically created ####################
 # bun completions
 [ -s "/home/nathan/.bun/_bun" ] && source "/home/nathan/.bun/_bun"
