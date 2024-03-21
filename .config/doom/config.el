@@ -2,10 +2,10 @@
 (setq user-full-name "Nathan Melaku"
       user-mail-address "nathanmelaku@protonmail.com")
 
-;; workaround for emacs crashing when started in daemon mode
+;; workaround for Emacs crashing when started in daemon mode
 (setq initial-scratch-message nil)
 
-;; UI related configuration
+;; User I related configuration
 (setq doom-font (font-spec :family "FiraCode Nerd Font Propo" :size 16 :weight 'semi-light)
       doom-variable-pitch-font (font-spec :family "Fira Sans" :size 18))
 (setq doom-theme 'doom-solarized-dark-high-contrast)
@@ -37,14 +37,22 @@
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
-(setq copilot-indent-offset-warning-disable t)
+              ("C-<tab>" . 'copilot-accept-completion-by-word))
+  :custom
+  (copilot-indent-offset-warning-disable t))
 
 ;; origami configuration
 (use-package! origami
   :hook (prog-mode . origami-mode))
 
+(use-package! beacon
+  :config
+  (beacon-mode 1)
+  :custom
+  (beacon-color "#00cba6"))
+
 ;; custom leader key bindings
 (map! :leader
-      :desc "Toggle code folding" "v f" #'origami-toggle-node
-      :desc "Toggle all code folding" "v a" #'origami-toggle-all-nodes)
+      (:prefix ("v" . "fold")
+       :desc "Toggle code folding" "t" #'origami-toggle-node
+       :desc "Toggle all code folding" "a" #'origami-toggle-all-nodes))
