@@ -10,7 +10,10 @@
       doom-theme 'doom-solarized-dark-high-contrast
       display-line-numbers-type 'relative
       pixel-scroll-precision-mode t
-      org-directory "~/Documents/Org/")
+      org-directory "~/Documents/Org/"
+      doom-modeline-position-line-format " "
+      doom-modeline-position-column-line-format " "
+      doom-modeline-major-mode-icon t )
 
 (set-face-attribute 'region nil :background "#001e26")
 
@@ -23,8 +26,7 @@
 
 (defun add-to-multiple-hooks (function hooks)
   "Add a function to multiple hooks"
-  (mapc (lambda (hook)
-          (add-hook hook function))
+  (mapc (lambda (hook) (add-hook hook function))
         hooks))
 
 (add-to-multiple-hooks 'enable-paredit-mode paredit-list)
@@ -54,7 +56,7 @@
 
 ;; copilot configuration
 (use-package! copilot
-  ;;:hook (prog-mode . copilot-mode)
+  :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)
@@ -96,7 +98,7 @@
       :scroll-bar-width 8
       :fringe-width 8)))
 
-(after! !which-key
+(after! which-key
   (which-key-enable-god-mode-support))
 
 (after! clojure-mode
@@ -112,9 +114,15 @@
   :desc "Toggle code folding" "o" #'origami-toggle-node
   :desc "Toggle all code folding" "O" #'origami-toggle-all-nodes))
 
+(defun god-mode-escape()
+  "escape god mode only if it is set"
+  (interactive)
+  (or god-local-mode
+      (god-local-mode)))
+
 ;; custom key bindings
 (map!
- "<escape>" #'god-local-mode
+ "<escape>" #'god-mode-escape
  :prefix "C-x"
  "C-1" #'delete-other-windows
  "C-2" #'split-window-below
