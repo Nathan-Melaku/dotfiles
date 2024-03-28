@@ -5,8 +5,8 @@
       user-mail-address "nathanmelaku@protonmail.com"
       initial-major-mode 'lisp-interaction-mode
       initial-scratch-message nil
-      doom-font (font-spec :family "JetBrainsMonoNL Nerd Font Propo" :size 16 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 18)
+      doom-font (font-spec :family "FiraCode Nerd Font" :size 18 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 20)
       doom-theme 'doom-solarized-dark-high-contrast
       display-line-numbers-type 'relative
       pixel-scroll-precision-mode t
@@ -117,12 +117,14 @@
 (defun god-mode-escape()
   "escape god mode only if it is set"
   (interactive)
-  (or god-local-mode
-      (god-local-mode)))
+  (if god-local-mode
+      (doom/escape)
+    (god-local-mode)))
 
 ;; custom key bindings
 (map!
  "<escape>" #'god-mode-escape
+ "M-j" #'join-line
  :prefix "C-x"
  "C-1" #'delete-other-windows
  "C-2" #'split-window-below
