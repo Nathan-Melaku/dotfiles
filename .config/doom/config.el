@@ -7,15 +7,13 @@
       initial-scratch-message nil
       doom-font (font-spec :family "FiraCode Nerd Font" :size 18 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Fira Sans" :size 20)
-      doom-theme 'doom-solarized-dark-high-contrast
+      doom-theme 'modus-vivendi
       display-line-numbers-type 'relative
       pixel-scroll-precision-mode t
       org-directory "~/Documents/Org/"
       doom-modeline-position-line-format " "
       doom-modeline-position-column-line-format " "
-      doom-modeline-major-mode-icon t )
-
-(set-face-attribute 'region nil :background "#001e26")
+      doom-modeline-major-mode-icon t)
 
 ;; Lisp goodies
 (setq paredit-list '(clojure-mode-hook
@@ -30,40 +28,6 @@
         hooks))
 
 (add-to-multiple-hooks 'enable-paredit-mode paredit-list)
-
-;; Treesit configuration
-(setq treesit-language-source-alist
-      '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-        (cmake "https://github.com/uyha/tree-sitter-cmake")
-        (c "https://github.com/tree-sitter/tree-sitter-c.git")
-        (css "https://github.com/tree-sitter/tree-sitter-css")
-        (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-        (clojure "https://github.com/sogaiu/tree-sitter-clojure")
-        (go "https://github.com/tree-sitter/tree-sitter-go")
-        (html "https://github.com/tree-sitter/tree-sitter-html")
-        (java "https://github.com/tree-sitter/tree-sitter-rust.git")
-        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-        (json "https://github.com/tree-sitter/tree-sitter-json")
-        (make "https://github.com/alemuller/tree-sitter-make")
-        (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-        (python "https://github.com/tree-sitter/tree-sitter-python")
-        (rust "https://github.com/tree-sitter/tree-sitter-rust.git")
-        (toml "https://github.com/tree-sitter/tree-sitter-toml")
-        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-        (yaml "https://github.com/ikatyang/tree-sitter-yaml")
-        (zig "https://github.com/maxxnino/tree-sitter-zig.git")))
-
-;; copilot configuration
-(use-package! copilot
-  :hook (prog-mode . copilot-mode)
-  :bind (:map copilot-completion-map
-              ("<tab>" . 'copilot-accept-completion)
-              ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word))
-  :custom
-  (copilot-indent-offset-warning-disable t))
 
 ;; origami configuration
 (use-package! origami
@@ -106,6 +70,7 @@
 
 (define-key emacs-lisp-mode-map (kbd "C-M-q") #'sp-delete-sexp)
 (define-key lisp-interaction-mode-map (kbd "C-M-q") #'sp-delete-sexp)
+(add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 ;; custom leader key bindings
 (map!

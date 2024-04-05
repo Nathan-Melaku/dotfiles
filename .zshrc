@@ -28,7 +28,7 @@ zstyle ':completion:*' menu select=2
 
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.emacs.d/bin:$PATH"
+export PATH="$HOME/.config/emacs/bin:$PATH"
 
 ####### Automatically created ####################
 # bun completions
