@@ -1,0 +1,25 @@
+{
+    "layer": "bottom",
+    "position": "top",
+    "height": 30,
+    "output": ["DP-1"],
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["hyprland/window"],
+    "modules-right": [],
+    "hyprland/workspaces": {
+        "format": "{name}: {icon}",
+        "format-icons": {
+            "1": " ",
+            "2": " ",
+            "3": " ",
+            "4": " ",
+            "5": " ",
+            "11": " ",
+            "12": " ",
+            "13": " ",
+            "14": " ",
+            "15": " "
+        },
+        "disable-scroll": true
+    }
+}
