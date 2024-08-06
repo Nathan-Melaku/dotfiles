@@ -12,7 +12,7 @@ export EZA_ICONS_AUTO=1
 
 # aliases
 alias vim="nvim"
-alias ls="ls --color=auto"
+alias ls="eza"
 alias grep="grep --color=auto"
 alias diff="diff --color=auto"
 alias ll="ls -lh"
