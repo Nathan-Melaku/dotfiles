@@ -1,7 +1,7 @@
 ;;; init.el -*- lexical-binding: t; -*-
 (doom! :completion
        (company +childframe)           ; the ultimate code completion backend
-       vertico           ; the search engine of the future
+       (vertico +childframe +icons)           ; the search engine of the future
 
        :ui
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
@@ -42,7 +42,7 @@
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
+       (syntax +icons)              ; tasing you for every semicolon you forget
        ;;(spell +everywhere +flyspell +aspell) ; tasing you for misspelling mispelling
        grammar           ; tasing grammar mistake every you make
 

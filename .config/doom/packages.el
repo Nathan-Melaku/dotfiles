@@ -15,3 +15,4 @@
                    (:exclude ".dir-locals.el" "*-tests.el"))))
 ;;(package! indent-bars
 ;; :recipe (:host github :repo "jdtsmith/indent-bars"))
+(package! prettier)
