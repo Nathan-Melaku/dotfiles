@@ -8,12 +8,14 @@
       user-mail-address "nathanmelaku@protonmail.com"
       initial-major-mode 'lisp-interaction-mode
       initial-scratch-message nil
-      doom-font (font-spec :family "FiraCode Nerd Font Propo" :size 24 :weight 'regular)
+      doom-font (font-spec :family "JetBrainsMonoNl Nerd Font Mono" :size 24 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Fira Sans" :size 26)
       doom-theme 'modus-vivendi-tinted
       display-line-numbers-type 'relative
       pixel-scroll-precision-mode t
       org-directory "~/Documents/Org/"
+      +doom-dashboard-banner-dir "~/.config/doom/"
+      +doom-dashboard-banner-file "banner.png"
       doom-modeline-major-mode-icon t
       modus-themes-bold-constructs t)
 
@@ -26,6 +28,18 @@
                      lisp-mode-hook
                      emacs-lisp-mode-hook))
 
+(setq major-mode-remap-alist
+      '((yaml-mode . yaml-ts-mode)
+        (bash-mode . bash-ts-mode)
+        (js2-mode . js-ts-mode)
+        (typescript-mode . typescript-ts-mode)
+        (typescript-tsx-mode . typescript-ts-mode)
+        (json-mode . json-ts-mode)
+        (css-mode . css-ts-mode)
+        (python-mode . python-ts-mode)))
+
+(setq treemacs-is-never-other-window nil)
+
 (defun add-to-multiple-hooks (function hooks)
   "Add a FUNCTION to multiple HOOKS."
   (mapc (lambda (hook) (add-hook hook function))
@@ -37,26 +51,26 @@
 (use-package! origami
   :hook (prog-mode . origami-mode))
 
-(use-package! god-mode
-  :custom
-  (god-mode-enable-function-key-translation nil)
-  (god-mode-alist '((nil . "C-")
-                    ("g" . "M-")
-                    ("m" . "C-M-")))
-  :config
-  (mapc (lambda (mode) (add-to-list 'god-exempt-major-modes mode))
-        '(vterm-mode eshell-mode))
-  :init
-  (god-mode-all))
+;; (use-package! god-mode
+;;   :custom
+;;   (god-mode-enable-function-key-translation nil)
+;;   (god-mode-alist '((nil . "C-")
+;;                     ("g" . "M-")
+;;                     ("m" . "C-M-")))
+;;   :config
+;;   (mapc (lambda (mode) (add-to-list 'god-exempt-major-modes mode))
+;;         '(vterm-mode eshell-mode))
+;;   :init
+;;   (god-mode-all))
 
-(defvar cursor-bar-list '(vterm-mode eshell-mode))
-(defun cursor-change-on-god-mode ()
-  (setq cursor-type
-        (cond
-         ((member major-mode cursor-bar-list) 'bar)
-         ((or god-local-mode buffer-read-only) 'box)
-         (t 'hbar))))
-(add-hook 'post-command-hook #'cursor-change-on-god-mode)
+;; (defvar cursor-bar-list '(vterm-mode eshell-mode))
+;; (defun cursor-change-on-god-mode ()
+;;   (setq cursor-type
+;;         (cond
+;;          ((member major-mode cursor-bar-list) 'bar)
+;;          ((or god-local-mode buffer-read-only) 'box)
+;;          (t 'hbar))))
+;; (add-hook 'post-command-hook #'cursor-change-on-god-mode)
 
 (use-package! spacious-padding
   :config
@@ -77,8 +91,8 @@
         '("~/Projects")))
 
 ;; After blocks
-(after! which-key
-  (which-key-enable-god-mode-support))
+;; (after! which-key
+;;   (which-key-enable-god-mode-support))
 
 (after! clojure-mode
   (map!
@@ -88,7 +102,6 @@
 (define-key lisp-interaction-mode-map (kbd "C-M-q") #'sp-delete-sexp)
 (add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1)))
 
-(add-hook 'after-init-hook #'global-prettier-mode)
 ;; custom leader key bindings
 (map!
  :leader
@@ -96,16 +109,16 @@
   :desc "Toggle code folding" "o" #'origami-toggle-node
   :desc "Toggle all code folding" "O" #'avy-goto-char-2origami-toggle-all-nodes))
 
-(defun god-mode-escape()
-  "Escape god mode only if it is set."
-  (interactive)
-  (if god-local-mode
-      (doom/escape)
-    (god-local-mode)))
+;; (defun god-mode-escape()
+;;   "Escape god mode only if it is set."
+;;   (interactive)
+;;   (if god-local-mode
+;;       (doom/escape)
+;;     (god-local-mode)))
 
 ;; custom key bindings
 (map!
- "<escape>" #'god-mode-escape
+ ;; "<escape>" #'god-mode-escape
  "M-j" #'join-line
  "C-." #'embark-act
  :prefix "C-x"
@@ -120,16 +133,17 @@
  "p" #'previous-buffer)
 
 (map!
- "C-M-g" #'avy-goto-char-2)
+ "C-M-g" #'avy-goto-char-2
+ "C-M-w" #'golden-ratio)
 
 ;; god mode key bindings
-(map!
- :after god-mode
- :map god-local-mode-map
- "i" #'god-local-mode
- "z" #'repeat
- "[" #'backward-paragraph
- "]" #'forward-paragraph)
+;; (map!
+;;  :after god-mode
+;;  :map god-local-mode-map
+;;  "i" #'god-local-mode
+;;  "z" #'repeat
+;;  "[" #'backward-paragraph
+;;  "]" #'forward-paragraph)
 
 (map! :after cc-mode
       :map java-mode-map

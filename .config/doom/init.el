@@ -5,6 +5,7 @@
 
        :ui
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
+       doom-dashboard
        (emoji +unicode)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        (ligatures)        ; ligatures and symbols to make your code pretty again
@@ -14,14 +15,14 @@
        (treemacs +lsp)          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
        (vc-gutter +diff-hl) ; vcs diff in the fringe
-       (window-select +numbers)     ; visually switch windows
+       (window-select +switch-window)     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
        zen               ; distraction-free coding or writing
        ;;indent-guides
 
 
        :editor
-       ;;(evil +everywhere); come to the dark side, we have cookies
+       (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        (format +onsave)  ; automated prettiness
        multiple-cursors  ; editing in many places at once
@@ -57,7 +58,7 @@
        lookup              ; navigate your code and its documentation
        lsp               ; M-x vscode
        magit             ; a git porcelain for Emacs
-       ;;make              ; run make tasks from Emacs
+       make              ; run make tasks from Emacs
        pass              ; password manager for nerds
        pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders

@@ -31,7 +31,6 @@ zinit light-mode for \
 ## custom config
 source "$HOME"/.config/zsh/custom.zsh
 
-
 ####### Automatically created ####################
 # bun completions
 [ -s "/home/nathan/.bun/_bun" ] && source "/home/nathan/.bun/_bun"
