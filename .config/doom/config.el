@@ -19,7 +19,7 @@
       doom-modeline-major-mode-icon t
       modus-themes-bold-constructs t)
 
-(add-to-list 'default-frame-alist '(alpha-background . 85))
+(add-to-list 'default-frame-alist '(alpha-background . 95))
 
 ;; Lisp goodies
 (setq paredit-list '(clojure-mode-hook

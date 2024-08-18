@@ -3,11 +3,11 @@
     "position": "top",
     "height": 30,
     "output": ["HDMI-A-1"],
-    "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["hyprland/window"],
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
+    "modules-center": ["sway/window"],
     "modules-right": ["tray", "pulseaudio", "clock", "custom/power"],
-    "hyprland/workspaces": {
-        "format": "{name}: {icon}",
+    "sway/workspaces": {
+        "format": "{icon}",
         "format-icons": {
         "1": " ",
         "2": " ",
