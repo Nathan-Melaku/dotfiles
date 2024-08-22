@@ -14,3 +14,5 @@
                    (:exclude ".dir-locals.el" "*-tests.el"))))
 (package! golden-ratio)
 (package! evil-tutor)
+(package! undo-tree)
+(package! beacon)

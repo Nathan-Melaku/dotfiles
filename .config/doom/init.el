@@ -5,7 +5,7 @@
 
        :ui
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       doom-dashboard
+       ;;doom-dashboard
        (emoji +unicode)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        (ligatures)        ; ligatures and symbols to make your code pretty again

@@ -41,10 +41,30 @@ window#waybar.solo {
     color: rgba(238, 46, 36, 1);
 }
 
+#tags {
+    margin: 0 5px;
+    background: rgba(35, 31, 32, 0);
+}
+
+#tags button {
+    padding: 0 5px;
+    color: rgba(217, 216, 216, 0.4);
+}
+
+#tags button.visible {
+    color: rgba(217, 216, 216, 1);
+}
+
+#tags button.focused {
+    border-top: 3px solid rgba(217, 216, 216, 1);
+    border-bottom: 3px solid rgba(217, 216, 216, 0);
+}
+
+#tags button.urgent {
+    color: rgba(238, 46, 36, 1);
+}
+
 #mode,
-#cpu,
-#memory,
-#network,
 #pulseaudio,
 #idle_inhibitor,
 #custom-power {

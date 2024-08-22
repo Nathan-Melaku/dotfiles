@@ -19,6 +19,7 @@ alias rm="rm -i"
 alias cp="cp -i"
 alias mv="mv -i"
 alias v="emacsclient -nw"
+eval $(thefuck --alias)
 
 ## PLUGINS
 zinit ice depth=1; zinit light romkatv/powerlevel10k

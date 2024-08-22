@@ -8,8 +8,8 @@
       user-mail-address "nathanmelaku@protonmail.com"
       initial-major-mode 'lisp-interaction-mode
       initial-scratch-message nil
-      doom-font (font-spec :family "JetBrainsMonoNl Nerd Font Mono" :size 24 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 26)
+      doom-font (font-spec :family "JetBrainsMonoNl Nerd Font Mono" :size 20 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 22)
       doom-theme 'modus-vivendi-tinted
       display-line-numbers-type 'relative
       pixel-scroll-precision-mode t
@@ -20,6 +20,7 @@
       modus-themes-bold-constructs t)
 
 (add-to-list 'default-frame-alist '(alpha-background . 95))
+(add-to-list 'default-frame-alist  '(undecorated . t))
 
 ;; Lisp goodies
 (setq paredit-list '(clojure-mode-hook
@@ -51,27 +52,6 @@
 (use-package! origami
   :hook (prog-mode . origami-mode))
 
-;; (use-package! god-mode
-;;   :custom
-;;   (god-mode-enable-function-key-translation nil)
-;;   (god-mode-alist '((nil . "C-")
-;;                     ("g" . "M-")
-;;                     ("m" . "C-M-")))
-;;   :config
-;;   (mapc (lambda (mode) (add-to-list 'god-exempt-major-modes mode))
-;;         '(vterm-mode eshell-mode))
-;;   :init
-;;   (god-mode-all))
-
-;; (defvar cursor-bar-list '(vterm-mode eshell-mode))
-;; (defun cursor-change-on-god-mode ()
-;;   (setq cursor-type
-;;         (cond
-;;          ((member major-mode cursor-bar-list) 'bar)
-;;          ((or god-local-mode buffer-read-only) 'box)
-;;          (t 'hbar))))
-;; (add-hook 'post-command-hook #'cursor-change-on-god-mode)
-
 (use-package! spacious-padding
   :config
   (spacious-padding-mode 1)
@@ -90,10 +70,6 @@
   (setq projectile-project-search-path
         '("~/Projects")))
 
-;; After blocks
-;; (after! which-key
-;;   (which-key-enable-god-mode-support))
-
 (after! clojure-mode
   (map!
    :map clojure-mode-map
@@ -109,16 +85,8 @@
   :desc "Toggle code folding" "o" #'origami-toggle-node
   :desc "Toggle all code folding" "O" #'avy-goto-char-2origami-toggle-all-nodes))
 
-;; (defun god-mode-escape()
-;;   "Escape god mode only if it is set."
-;;   (interactive)
-;;   (if god-local-mode
-;;       (doom/escape)
-;;     (god-local-mode)))
-
 ;; custom key bindings
 (map!
- ;; "<escape>" #'god-mode-escape
  "M-j" #'join-line
  "C-." #'embark-act
  :prefix "C-x"
@@ -135,15 +103,6 @@
 (map!
  "C-M-g" #'avy-goto-char-2
  "C-M-w" #'golden-ratio)
-
-;; god mode key bindings
-;; (map!
-;;  :after god-mode
-;;  :map god-local-mode-map
-;;  "i" #'god-local-mode
-;;  "z" #'repeat
-;;  "[" #'backward-paragraph
-;;  "]" #'forward-paragraph)
 
 (map! :after cc-mode
       :map java-mode-map

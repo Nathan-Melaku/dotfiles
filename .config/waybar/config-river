@@ -3,25 +3,25 @@
     "position": "top",
     "height": 30,
     "output": ["HDMI-A-1"],
-    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
-    "modules-center": ["sway/window"],
+    "modules-left": ["river/tags", "river/mode", "river/layout"],
+    "modules-center": ["river/window"],
     "modules-right": ["tray", "pulseaudio", "clock", "custom/power"],
-    "sway/workspaces": {
+    "river/tags": {
         "format": "{icon}",
         "format-icons": {
-        "1": " ",
-        "2": " ",
-        "3": " ",
-        "4": " ",
-        "5": " ",
-        "11": " ",
-        "12": " ",
-        "13": " ",
-        "14": " ",
-        "15": " "
+            "1": " ",
+            "2": " ",
+            "3": " ",
+            "4": " ",
+            "5": " ",
+            "11": " ",
+            "12": " ",
+            "13": " ",
+            "14": " ",
+            "15": " "
         },
         "disable-scroll": true
-        },
+    },
     "clock": {
         "format": "{:%a %d %b %H:%M}",
         "tooltip": false
