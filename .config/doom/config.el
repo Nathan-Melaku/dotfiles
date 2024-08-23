@@ -19,7 +19,7 @@
       doom-modeline-major-mode-icon t
       modus-themes-bold-constructs t)
 
-(add-to-list 'default-frame-alist '(alpha-background . 95))
+(add-to-list 'default-frame-alist '(alpha-background . 90))
 (add-to-list 'default-frame-alist  '(undecorated . t))
 
 ;; Lisp goodies

@@ -1,0 +1,5 @@
+# packages file is there to just track installed packages
+
+packages
+\.git
+\.gitignore

@@ -6,6 +6,7 @@ set $up k
 set $right l
 set $term kitty
 set $menu wofi --show drun
+set $lock_image ~/Pictures/geek.jpg
 
 ### autostart
 exec blueman-applet &
@@ -13,12 +14,14 @@ exec nm-applet &
 exec /usr/lib/polkit-kde-authentication-agent-1 &
 exec udiskie &
 
+exec_always autotiling
+
 ### Output configuration
 output HDMI-A-1 bg ~/Pictures/wallpaper.jpg fill
 output DP-1 bg ~/Pictures/vertical.png fill
 output HDMI-A-1 resolution 3840x2160 position 0,0
-output HDMI-A-1 scale 1.5
-output DP-1 resolution 1920x1080 position 2560,0
+output HDMI-A-1 scale 1.25
+output DP-1 resolution 1920x1080 position 3072,0
 output DP-1 transform 90
 
 workspace 1 output HDMI-A-1
@@ -27,13 +30,19 @@ workspace 3 output HDMI-A-1
 workspace 4 output HDMI-A-1
 workspace 5 output HDMI-A-1
 
+### Decorations
+    default_border none
+    gaps inner 5
+    ## only work with swayfx
+    layer_effects "waybar" blur enable; shadows enable; corner_radius 10
+    blur enable
+    corner_radius 10
+
 ### Key bindings
     bindsym $mod+Return exec $term
     bindsym $mod+c kill
     bindsym $mod+d exec $menu
     floating_modifier $mod normal
-    default_border none
-    gaps inner 10
     bindsym $mod+Shift+r reload
     bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
@@ -89,7 +98,7 @@ workspace 5 output HDMI-A-1
 
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
+    bindsym $mod+y layout tabbed
     bindsym $mod+e layout toggle split
     bindsym $mod+f fullscreen
 
@@ -136,6 +145,9 @@ bindsym $mod+r mode "resize"
 
 # Custom
 bindsym $mod+Shift+e exec emacsclient -nc
+bindsym $mod+p exec grim -g "$(slurp)" - | swappy -f -
+bindsym $mod+Alt+l exec swaylock -i $lock_image -l --indicator-radius=100
+bindsym $mod+Shift+b exec "if pgrep waybar; then killall waybar; else waybar; fi"
 
 # Status Bar:
 bar {
