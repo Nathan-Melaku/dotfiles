@@ -1,0 +1,15 @@
+ignore-empty-password
+font="Fira Sans Semibold"
+
+clock
+timestr=%R
+datestr=%a, %e of %B
+
+image=~/Pictures/wallpaper.jpg
+fade-in=1
+effect-blur=20x6
+
+indicator
+indicator-radius=200
+indicator-thickness=20
+indicator-caps-lock

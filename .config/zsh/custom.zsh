@@ -18,7 +18,7 @@ alias cat="bat"
 alias rm="rm -i"
 alias cp="cp -i"
 alias mv="mv -i"
-alias v="emacsclient -nw"
+alias v="nvim"
 eval $(thefuck --alias)
 
 ## PLUGINS
@@ -54,6 +54,9 @@ zinit cdreplay -q
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh

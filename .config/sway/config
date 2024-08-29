@@ -18,7 +18,7 @@ exec_always autotiling
 
 ### Output configuration
 output HDMI-A-1 bg ~/Pictures/wallpaper.jpg fill
-output DP-1 bg ~/Pictures/vertical.png fill
+output DP-1 bg ~/Pictures/black.jpg fill
 output HDMI-A-1 resolution 3840x2160 position 0,0
 output HDMI-A-1 scale 1.25
 output DP-1 resolution 1920x1080 position 3072,0
@@ -144,9 +144,9 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Custom
-bindsym $mod+Shift+e exec emacsclient -nc
+bindsym $mod+Shift+e exec emacsclient -c
 bindsym $mod+p exec grim -g "$(slurp)" - | swappy -f -
-bindsym $mod+Alt+l exec swaylock -i $lock_image -l --indicator-radius=100
+bindsym $mod+Alt+l exec swaylock
 bindsym $mod+Shift+b exec "if pgrep waybar; then killall waybar; else waybar; fi"
 
 # Status Bar:
