@@ -51,6 +51,7 @@ bindkey '^n' history-search-forward
 zinit cdreplay -q
 
 # PATHS
+export PATH="$HOME/.local/share/JetBrains/Toolbox/scripts:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"

@@ -10,6 +10,7 @@ return {
         'c',
         'diff',
         'html',
+        'hyprlang',
         'lua',
         'luadoc',
         'markdown',

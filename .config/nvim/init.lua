@@ -19,8 +19,8 @@ vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+--vim.opt.list = true
+--vim.opt.listchars = { tab = '│ ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 vim.opt.scrolloff = 10
@@ -45,6 +45,10 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+vim.filetype.add {
+  pattern = { ['.*/hypr/.*%.conf'] = 'hyprlang' },
+}
 
 -- [[ Basic Autocommands ]]
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -142,6 +146,7 @@ require('lazy').setup({
   require 'nate.plugins.telescope',
   require 'nate.plugins.comfort',
   require 'nate.plugins.mini',
+  require 'nate.plugins.indent_line',
 
   -- uncomment to load all lua files in custom/plugin directory
   -- { import = 'custom.plugins' },
