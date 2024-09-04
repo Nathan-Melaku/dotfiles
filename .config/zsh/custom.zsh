@@ -12,13 +12,13 @@ alias vim="nvim"
 alias ls="eza -l"
 alias grep="grep --color=auto"
 alias diff="diff --color=auto"
-alias ll="ls -lh"
+alias ll="ls -lah"
 alias la="ls -a"
 alias cat="bat"
 alias rm="rm -i"
 alias cp="cp -i"
 alias mv="mv -i"
-alias v="nvim"
+alias v="emacsclient -nc"
 eval $(thefuck --alias)
 
 ## PLUGINS
