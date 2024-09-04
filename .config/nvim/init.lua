@@ -32,6 +32,8 @@ vim.opt.shiftwidth = 4
 
 -- [[ Basic Keymaps ]]
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<leader>bs', '<cmd>write<CR>')
+vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>')
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
@@ -147,6 +149,7 @@ require('lazy').setup({
   require 'nate.plugins.comfort',
   require 'nate.plugins.mini',
   require 'nate.plugins.indent_line',
+  -- require 'nate.plugins.lualine',
 
   -- uncomment to load all lua files in custom/plugin directory
   -- { import = 'custom.plugins' },
