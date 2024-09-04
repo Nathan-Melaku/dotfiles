@@ -1,0 +1,16 @@
+#+AUTHOR: Nathan Melaku
+#+TITLE: Configuration files for nate's setup
+
+* Introduction
+This is a collection of configuration files that I use for my daily driver pc. Maily I use
+     - Swayfx for window managment
+     - waybar for status bar
+     - Kitty terminal
+     - zsh
+     - emacs for editing
+
+But I also experiment with other wayland window managers and neovim. so you will find additional configs for
+     - river window manager
+     - hyprland window manager
+     - nvim
+     - tmux
