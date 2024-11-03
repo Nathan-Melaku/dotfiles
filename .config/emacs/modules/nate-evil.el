@@ -28,6 +28,8 @@
   :config
   (global-evil-surround-mode 1))
 
+(use-package vimish-fold)
+
 (use-package which-key
   :config
   (which-key-mode))

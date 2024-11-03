@@ -5,15 +5,20 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (setq-default tab-width 4)
-;; set font
-(set-face-attribute 'default nil :font "JetBrainsMonoNL Nerd Font Mono" :height 150)
-(set-frame-parameter nil 'alpha-background 95)
+;; ;; set font
+(add-to-list 'default-frame-alist '(font . "JetBrainsMonoNL Nerd Font Mono-18" ))
+(add-to-list 'default-frame-alist '(alpha-background . 95))
 (blink-cursor-mode -1)
+
+(defun nate/transparent ()
+  (interactive)
+(set-face-attribute 'default nil :font "JetBrainsMonoNL Nerd Font Mono" :height 150)
+(set-frame-parameter nil 'alpha-background 95))
 
 ;; Theme
 (use-package doom-themes
   :config
-  (load-theme 'doom-tokyo-night t))
+  (load-theme 'doom-palenight t))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))

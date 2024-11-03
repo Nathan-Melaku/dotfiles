@@ -1,5 +1,5 @@
 ;; init.el
-
+;; bootstrap striaght 
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -26,6 +26,7 @@
 (require 'nate-evil)
 (require 'nate-programming)
 (require 'nate-tools)
+(require 'nate-org)
 (require 'nate-keybindings)
 
 (provide 'init.el)

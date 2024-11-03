@@ -1,38 +1,75 @@
 ;; nate-core.el
 
 ;; Disable the startup message
-(setq inhibit-startup-message t
+(setq gc-cons-threshold #x40000000
+	  read-process-output-max (* 1024 1024 4)
+	  inhibit-startup-message t
 	  byte-compile-warnings nil
 	  warning-minimum-level :emergency
-	  make-backup-files nil)
+	  make-backup-files nil
+	  history-length 25
+	  use-dialog-box nil
+	  global-auto-revert-non-file-buffers t)
+
+
+;; custom vars on my location
+(setq custom-file (locate-user-emacs-file "nate-custom.el"))
+(load custom-file 'noerror 'nomessage)
 
 ;; Enable vertico
 (use-package vertico
   :custom
-   (vertico-scroll-margin 0) ;; Different scroll margin
-   (vertico-count 20) ;; Show more candidates
-   (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
-   (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+   (vertico-scroll-margin 0)
+   (vertico-count 20)
+   (vertico-resize t)
+   (vertico-cycle t)
   :init
   (vertico-mode))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :init
-  (savehist-mode))
+  (savehist-mode 1))
 
 ;; A few more useful configurations...
 (use-package emacs
+  :ensure nil
   :custom
-  ;; Support opening new minibuffers from inside existing minibuffers.
+  ;; history 
+  (recentf-mode 1)
+  (save-place-mode 1)
+  (global-auto-revert-mode 1)
+  (file-name-shadow-mode 1)
+  (column-number-mode t)
+  (auto-save-default nil)
+  (create-lockfiles nil)
+  (delete-by-moving-to-trash t)
+  (delete-selection-mode 1)
+  (global-auto-revert-non-file-buffers t)
   (enable-recursive-minibuffers t)
-  ;; Emacs 28 and newer: Hide commands in M-x which do not work in the current
-  ;; mode.  Vertico commands are hidden in normal buffers. This setting is
-  ;; useful beyond Vertico.
   (read-extended-command-predicate #'command-completion-default-include-p)
+  (inhibit-startup-message t)
+  (initial-scratch-message "")
+  (ispell-dictionary "en_US")
+  (make-backup-files nil)
+  (pixel-scroll-precision-mode t)
+  (pixel-scroll-precision-use-momentum nil)
+  (ring-bell-function 'ignore)
+  (split-width-threshold 300)
+  (switch-to-buffer-obey-display-actions t)
+  (tab-always-indent 'complete)
+  (tab-width 4)
+  (treesit-font-lock-level 4)
+  (truncate-lines t)
+  (use-dialog-box nil)
+  (use-short-answers t)
+  (warning-minimum-level :emergency)
+  :config
+  (defun skip-these-buffers (_window buffer _bury-or-kill)
+	"Function for `switch-to-prev-buffer-skip'."
+	(string-match "\\*[^*]+\\*" (buffer-name buffer)))
+  (setq switch-to-prev-buffer-skip 'skip-these-buffers)
   :init
-  ;; Add prompt indicator to `completing-read-multiple'.
-  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
                   (replace-regexp-in-string
@@ -47,20 +84,41 @@
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 
+(use-package window
+  :ensure nil
+  :straight nil
+  :custom
+  (setq display-buffer-alist
+   '(
+	 ("\\*.*e?shell\\*"
+	  (display-buffer-in-side-window)
+	  (window-hight . 0.25)
+	  (side . bottom)
+	  (slot . -1))
+
+	 ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|[Hh]elp\\|Messages\\|Bookmark List\\|Ibuffer\\|Occur\\|eldoc.*\\)\\*"
+	  (display-buffer-in-side-window)
+	  (window-hight . 0.25)
+	  (side . bottom)
+
+	 ("\\*\\(lsp-help\\)\\*"
+      (display-buffer-in-side-window)
+      (window-height . 0.25)
+      (side . bottom)
+      (slot . 0))
+     
+     ("\\*\\(Flymake diagnostics\\|xref\\|ivy\\|Swiper\\|Completions\\)"
+      (display-buffer-in-side-window)
+      (window-height . 0.25)
+      (side . bottom)
+      (slot . 1))  (slot . 0))
+	 )))
+
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
-  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
-  ;; available in the *Completions* buffer, add it to the
-  ;; `completion-list-mode-map'.
   :bind (:map minibuffer-local-map
          ("M-A" . marginalia-cycle))
-
-  ;; The :init section is always executed.
   :init
-
-  ;; Marginalia must be activated in the :init section of use-package such that
-  ;; the mode gets enabled right away. Note that this forces loading the
-  ;; package.
   (marginalia-mode))
 
 (use-package orderless
@@ -70,7 +128,6 @@
 
 ;; Example configuration for Consult
 (use-package consult
-  ;; Replace bindings. Lazily loaded by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
          ("C-c h" . consult-history)
@@ -123,54 +180,21 @@
          :map minibuffer-local-map
          ("M-s" . consult-history)                 ;; orig. next-matching-history-element
          ("M-r" . consult-history))                ;; orig. previous-matching-history-element
-
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
   :hook (completion-list-mode . consult-preview-at-point-mode)
-
-  ;; The :init configuration is always executed (Not lazy)
   :init
-
-  ;; Optionally configure the register formatting. This improves the register
-  ;; preview for `consult-register', `consult-register-load',
-  ;; `consult-register-store' and the Emacs built-ins.
   (setq register-preview-delay 0.5
         register-preview-function #'consult-register-format)
-
-  ;; Optionally tweak the register preview window.
-  ;; This adds thin lines, sorting and hides the mode line of the window.
   (advice-add #'register-preview :override #'consult-register-window)
-
-  ;; Use Consult to select xref locations with preview
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
-
-  ;; Configure other variables and modes in the :config section,
-  ;; after lazily loading the package.
   :config
-
-  ;; Optionally configure preview. The default value
-  ;; is 'any, such that any key triggers the preview.
-  ;; (setq consult-preview-key 'any)
-  ;; (setq consult-preview-key "M-.")
-  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
-  ;; For some commands and buffer sources it is useful to configure the
-  ;; :preview-key on a per-command basis using the `consult-customize' macro.
   (consult-customize
    consult-theme :preview-key '(:debounce 0.2 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
    consult--source-bookmark consult--source-file-register
    consult--source-recent-file consult--source-project-recent-file
-   ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any))
-
-  ;; Optionally configure the narrowing key.
-  ;; Both < and C-+ work reasonably well.
   (setq consult-narrow-key "<") ;; "C-+"
-
-  ;; Optionally make narrowing help available in the minibuffer.
-  ;; You may want to use `embark-prefix-help-command' or which-key instead.
-  ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
 )
 (provide 'nate-core)
