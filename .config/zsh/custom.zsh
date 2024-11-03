@@ -18,7 +18,7 @@ alias cat="bat"
 alias rm="rm -i"
 alias cp="cp -i"
 alias mv="mv -i"
-alias v="emacsclient -nc"
+alias v="emacsclient -nw"
 eval $(thefuck --alias)
 
 ## PLUGINS
