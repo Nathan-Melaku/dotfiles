@@ -20,8 +20,8 @@ exec_always autotiling
 output HDMI-A-1 bg ~/Pictures/wallpaper.jpg fill
 output DP-1 bg ~/Pictures/black.jpg fill
 output HDMI-A-1 resolution 3840x2160 position 0,0
-output HDMI-A-1 scale 1.25
-output DP-1 resolution 1920x1080 position 3072,0
+output HDMI-A-1 scale 1
+output DP-1 resolution 1920x1080 position 3840,0
 output DP-1 transform 90
 
 workspace 1 output HDMI-A-1
@@ -37,7 +37,9 @@ workspace 5 output HDMI-A-1
     layer_effects "waybar" blur enable; shadows enable; corner_radius 10
     blur enable
     corner_radius 10
-
+# Border settings
+  	for_window [class=".*"] border pixel 2
+	client.focused          #4C7899 #285577 #ffffff #2e9ef4 #285577
 ### Key bindings
     bindsym $mod+Return exec $term
     bindsym $mod+c kill
