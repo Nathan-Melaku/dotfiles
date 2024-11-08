@@ -41,6 +41,10 @@ source "$HOME"/.custom.zsh
 # bun completions
 [ -s "/home/nathan/.bun/_bun" ] && source "/home/nathan/.bun/_bun"
 
+# rust
+export CARGO_INSTALL="$HOME/.cargo"
+export PATH="$CARGO_INSTALL/bin:$PATH"
+
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
