@@ -12,7 +12,7 @@
 
 ;; declutter emacs
 (use-package perspective
-  :after evil
+;;  :after evil
   :init
   (persp-mode))
 
@@ -70,6 +70,22 @@
 (add-hook 'astro-ts-mode-hook (lambda ()
 							(display-line-numbers-mode)
 							(setq display-line-numbers 'relative)))
+
+(use-package eldoc-box
+  :bind ("M-n h" . eldoc-box-help-at-point)
+  :config
+  (custom-set-faces
+   '(eldoc-box-body
+     ((t (:height 0.9 :family "Source Code Pro"))))))
+
+;; treesitter
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
 ;; lsp
 (use-package eglot
   :ensure nil
@@ -82,6 +98,9 @@
 						   '(company-capf :with company-yasnippet))
               (add-to-list 'company-backends
 						   '(company-capf :with company-files))))
+  (add-to-list 'eglot-server-programs
+			   '(scala-ts-mode . ("metals" :initializationOptions
+								  (:sbtScript "/home/nathan/.local/share/coursier/bin/sbt"))))
   (add-to-list 'eglot-server-programs '(svelte-mode . ("svelteserver" "--stdio")))
   (add-to-list 'eglot-server-programs
 			   '(astro-ts-mode . ("astro-ls" "--stdio" :initializationOptions
@@ -92,19 +111,38 @@
 (add-hook 'astro-ts-mode-hook 'eglot-ensure)
 (add-hook 'svelte-mode-hook 'eglot-ensure)
 
+;;==== LANGUAGES =======;;
+
+;; markdown
+(use-package markdown-mode
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown"))
+
 ;; the web
 (use-package web-mode)
 (use-package astro-ts-mode)
 (use-package svelte-mode)
 
-;; treesitter
-(use-package treesit-auto
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
+;; scala
+(use-package scala-ts-mode
+  :interpreter ("scala3" . scala-ts-mode)
+  :hook (scala-ts-mode . eglot-ensure))
 
+;; Enable sbt mode for executing sbt commands
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :mode ("\\.sbt\\'" . scala-ts-mode)
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+  (setq sbt:program-options '("-Dsbt.supershell=false")))
+
+;; Go
 (defun nate/go-revive-lint ()
   "Run revive for linting shows result in a new temp buffer"
   (interactive)
@@ -114,6 +152,6 @@
 		   (output (shell-command-to-string (format "revive %s" (shell-quote-argument file)))))
 	  (with-output-to-temp-buffer "*Revive lint output*"
 		(princ output)))))
-(define-key evil-normal-state-map (kbd "SPC g r") 'nate/go-revive-lint)
+;;(define-key evil-normal-state-map (kbd "SPC g r") 'nate/go-revive-lint)
 
 (provide 'nate-programming)

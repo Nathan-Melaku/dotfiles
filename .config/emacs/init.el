@@ -23,10 +23,11 @@
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 (require 'nate-core)
 (require 'nate-ui)
-(require 'nate-evil)
+;;(require 'nate-evil)
 (require 'nate-programming)
 (require 'nate-tools)
 (require 'nate-org)
+(require 'nate-eshell)
 (require 'nate-keybindings)
 
 (provide 'init.el)

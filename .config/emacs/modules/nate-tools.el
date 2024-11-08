@@ -1,11 +1,24 @@
 ;; nate-tools.el
+(use-package undo-tree)
+;; help menu
+(use-package which-key
+  :config
+  (which-key-mode))
+
 ;; eval inline
 (use-package eros
   :straight t
   :config
   (eros-mode 1))
 
+(use-package avy
+  :straight nil
+  :ensure nil
+  :config
+  (setq avy-timeout-seconds 0.3))
+
 (use-package vterm)
+
 (use-package ace-window
   :bind ("C-x o" . 'ace-window))
 
@@ -16,6 +29,7 @@
   (require 'dired+))
 
 (use-package dired-single)
+
 (defun nate/dired-init ()
   "Bunch of stuff to run for dired, either immediately or when it's
    loaded."
@@ -53,5 +67,25 @@
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package pdf-tools)
+
+;; treemacs
+(use-package treemacs
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t d"   . treemacs-select-directory)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+(use-package treemacs-projectile
+  :after (treemacs projectile))
+(use-package treemacs-magit)
+
+(use-package exec-path-from-shell)
+(exec-path-from-shell-initialize)
 
 (provide 'nate-tools)

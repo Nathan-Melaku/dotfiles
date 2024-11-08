@@ -4,7 +4,8 @@
   :ensure nil
   :straight nil
   :config
-  (setq org-directory "~/Documents/Org"))
+  (setq org-directory "~/Documents/Org")
+  (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 (use-package org-superstar
   :hook (org-mode . (lambda () (org-superstar-mode 1))))

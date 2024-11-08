@@ -1,5 +1,4 @@
 ;; nate-evil.el
-(use-package undo-tree)
 (use-package goto-chg)
 
 (use-package evil
@@ -30,7 +29,4 @@
 
 (use-package vimish-fold)
 
-(use-package which-key
-  :config
-  (which-key-mode))
 (provide 'nate-evil)
