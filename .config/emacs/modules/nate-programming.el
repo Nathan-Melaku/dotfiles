@@ -12,7 +12,6 @@
 
 ;; declutter emacs
 (use-package perspective
-;;  :after evil
   :init
   (persp-mode))
 
@@ -25,7 +24,7 @@
 (use-package ts-fold
   :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold"))
 
-;; project management 
+;; project management
 (use-package projectile
   :ensure t
   :init
@@ -38,10 +37,10 @@
   :hook (after-init . global-company-mode)
   :config
   (setq company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.1))
-		company-tooltip-align-annotations t
-		company-transformers '(company-sort-by-backend-importance)))
+        company-tooltip-align-annotations t
+        company-transformers '(company-sort-by-backend-importance)))
 
-;; completion ranking 
+;; completion ranking
 (use-package prescient)
 (use-package company-prescient
   :config
@@ -64,12 +63,12 @@
 
 ;; line numbers in programming modes
 (add-hook 'prog-mode-hook (lambda ()
-							(display-line-numbers-mode)
-							(setq display-line-numbers 'relative)))
+                            (display-line-numbers-mode)
+                            (setq display-line-numbers 'relative)))
 
 (add-hook 'astro-ts-mode-hook (lambda ()
-							(display-line-numbers-mode)
-							(setq display-line-numbers 'relative)))
+                                (display-line-numbers-mode)
+                                (setq display-line-numbers 'relative)))
 
 (use-package eldoc-box
   :bind ("M-n h" . eldoc-box-help-at-point)
@@ -93,18 +92,18 @@
   :config
   (setq eglot-extend-to-xref t)
   (add-hook 'eglot-managed-mode-hook
-			(lambda ()
+            (lambda ()
               (add-to-list 'company-backends
-						   '(company-capf :with company-yasnippet))
+                           '(company-capf :with company-yasnippet))
               (add-to-list 'company-backends
-						   '(company-capf :with company-files))))
+                           '(company-capf :with company-files))))
   (add-to-list 'eglot-server-programs
-			   '(scala-ts-mode . ("metals" :initializationOptions
-								  (:sbtScript "/home/nathan/.local/share/coursier/bin/sbt"))))
+               '(scala-ts-mode . ("metals" :initializationOptions
+                                  (:sbtScript "/home/nathan/.local/share/coursier/bin/sbt"))))
   (add-to-list 'eglot-server-programs '(svelte-mode . ("svelteserver" "--stdio")))
   (add-to-list 'eglot-server-programs
-			   '(astro-ts-mode . ("astro-ls" "--stdio" :initializationOptions
-								  (:typescript (:tsdk "./node_modules/typescript/lib"))))))
+               '(astro-ts-mode . ("astro-ls" "--stdio" :initializationOptions
+                                  (:typescript (:tsdk "./node_modules/typescript/lib"))))))
 
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
@@ -139,7 +138,7 @@
    'minibuffer-complete-word
    'self-insert-command
    minibuffer-local-completion-map)
-   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
   (setq sbt:program-options '("-Dsbt.supershell=false")))
 
 ;; Go
@@ -148,10 +147,10 @@
   (interactive)
   (when buffer-file-name
 
-	(let* ((file (file-relative-name buffer-file-name projectile-project-root))
-		   (output (shell-command-to-string (format "revive %s" (shell-quote-argument file)))))
-	  (with-output-to-temp-buffer "*Revive lint output*"
-		(princ output)))))
+    (let* ((file (file-relative-name buffer-file-name projectile-project-root))
+           (output (shell-command-to-string (format "revive %s" (shell-quote-argument file)))))
+      (with-output-to-temp-buffer "*Revive lint output*"
+        (princ output)))))
 ;;(define-key evil-normal-state-map (kbd "SPC g r") 'nate/go-revive-lint)
 
 (provide 'nate-programming)

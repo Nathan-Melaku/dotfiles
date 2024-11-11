@@ -13,6 +13,8 @@
   ","   'persp-switch-to-buffer
   "TAB" 'perspective-map
   "p"   'projectile-command-map
+  "d"   'duplicate-line
+  "c"   'copy-from-above-command
 
   ;; files
   "f" '(:ignore t :which-key "files")

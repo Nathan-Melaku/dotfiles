@@ -2,14 +2,14 @@
 
 ;; Disable the startup message
 (setq gc-cons-threshold #x40000000
-	  read-process-output-max (* 1024 1024 4)
-	  inhibit-startup-message t
-	  byte-compile-warnings nil
-	  warning-minimum-level :emergency
-	  make-backup-files nil
-	  history-length 25
-	  use-dialog-box nil
-	  global-auto-revert-non-file-buffers t)
+      read-process-output-max (* 1024 1024 4)
+      inhibit-startup-message t
+      byte-compile-warnings nil
+      warning-minimum-level :emergency
+      make-backup-files nil
+      history-length 25
+      use-dialog-box nil
+      global-auto-revert-non-file-buffers t)
 
 
 ;; custom vars on my location
@@ -35,7 +35,7 @@
 (use-package emacs
   :ensure nil
   :custom
-  ;; history 
+  ;; history
   (recentf-mode 1)
   (save-place-mode 1)
   (global-auto-revert-mode 1)
@@ -59,6 +59,7 @@
   (switch-to-buffer-obey-display-actions t)
   (tab-always-indent 'complete)
   (tab-width 4)
+  (indent-tabs-mode nil)
   (treesit-font-lock-level 4)
   (truncate-lines t)
   (use-dialog-box nil)
@@ -66,8 +67,8 @@
   (warning-minimum-level :emergency)
   :config
   (defun skip-these-buffers (_window buffer _bury-or-kill)
-	"Function for `switch-to-prev-buffer-skip'."
-	(string-match "\\*[^*]+\\*" (buffer-name buffer)))
+    "Function for `switch-to-prev-buffer-skip'."
+    (string-match "\\*[^*]+\\*" (buffer-name buffer)))
   (setq switch-to-prev-buffer-skip 'skip-these-buffers)
   :init
   (defun crm-indicator (args)
@@ -90,29 +91,42 @@
   :custom
   (setq display-buffer-alist
    '(
-	 ("\\*.*e?shell\\*"
-	  (display-buffer-in-side-window)
-	  (window-hight . 0.25)
-	  (side . bottom)
-	  (slot . -1))
+     ("\\*.*e?shell\\*"
+      (display-buffer-in-side-window)
+      (window-hight . 0.25)
+      (side . bottom)
+      (slot . -1))
 
-	 ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|[Hh]elp\\|Messages\\|Bookmark List\\|Ibuffer\\|Occur\\|eldoc.*\\)\\*"
-	  (display-buffer-in-side-window)
-	  (window-hight . 0.25)
-	  (side . bottom)
+     ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|[Hh]elp\\|Messages\\|Bookmark List\\|Ibuffer\\|Occur\\|eldoc.*\\)\\*"
+      (display-buffer-in-side-window)
+      (window-hight . 0.25)
+      (side . bottom)
 
-	 ("\\*\\(lsp-help\\)\\*"
+     ("\\*\\(lsp-help\\)\\*"
       (display-buffer-in-side-window)
       (window-height . 0.25)
       (side . bottom)
       (slot . 0))
-     
      ("\\*\\(Flymake diagnostics\\|xref\\|ivy\\|Swiper\\|Completions\\)"
       (display-buffer-in-side-window)
       (window-height . 0.25)
       (side . bottom)
       (slot . 1))  (slot . 0))
-	 )))
+     )))
+
+;; display whitespaces properly
+(use-package whitespace
+  :ensure nil
+  :straight nil
+  :config
+  (setq
+    whitespace-style '(face tabs tab-mark spaces space-mark trailing newline newline-mark)
+    whitespace-display-mappings '(
+      (space-mark   ?\     [?\u00B7]     [?.])
+      (space-mark   ?\xA0  [?\u00A4]     [?_])
+      (tab-mark     ?\t    [?\u00BB ?\t] [?\\ ?\t])))
+  (setq whitespace-global-modes '(prog-mode))
+  (global-whitespace-mode 1))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia

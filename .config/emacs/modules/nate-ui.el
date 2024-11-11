@@ -20,13 +20,16 @@
   :config
   (load-theme 'doom-palenight t))
 
-(use-package doom-modeline
-  :hook (after-init . doom-modeline-mode))
+(use-package mood-line
+  :config
+  (mood-line-mode)
+  :custom
+  (mood-line-glyph-alist mood-line-glyphs-unicode))
 
 (use-package vertico-posframe
   :config
   (setq vertico-posframe-parameters
-		'((left-fringe . 8)
+        '((left-fringe . 8)
           (right-fringe . 8)))
   (vertico-posframe-mode 1))
 

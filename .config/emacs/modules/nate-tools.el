@@ -20,7 +20,9 @@
 (use-package vterm)
 
 (use-package ace-window
-  :bind ("C-x o" . 'ace-window))
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  :bind ("M-o" . 'ace-window))
 
 ;; Dired mode 
 (use-package dired+
@@ -87,5 +89,26 @@
 
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
+
+(use-package multiple-cursors
+  :bind
+  ("C->" . mc/mark-next-like-this)
+  ("C-<" . mc/mark-previous-like-this)
+  ("C-c C-<" . mc/mark-all-like-this))
+
+;; moveing text up and down with M-Up and M-Down
+(use-package move-text
+  :config
+  (move-text-default-bindings))
+;; indent after move
+(defun indent-region-advice (&rest ignored)
+  (let ((deactivate deactivate-mark))
+    (if (region-active-p)
+		(indent-region (region-beginning) (region-end))
+      (indent-region (line-beginning-position) (line-end-position)))
+    (setq deactivate-mark deactivate)))
+
+(advice-add 'move-text-up :after 'indent-region-advice)
+(advice-add 'move-text-down :after 'indent-region-advice)
 
 (provide 'nate-tools)
