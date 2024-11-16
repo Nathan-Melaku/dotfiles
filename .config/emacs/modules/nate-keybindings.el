@@ -1,20 +1,29 @@
 ;; nate-keybindings.el
 
+(defun nate/spawn-eat ()
+  "open an eat shell below the given window"
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  (eat))
+
+(global-unset-key (kbd "M-SPC"))
 (use-package general
   :config
-  (defconst nate-leader "M-n")
+  (defconst nate-leader "M-SPC")
   (general-create-definer nate-leader-map
-	:prefix nate-leader)
+    :prefix nate-leader)
   (nate-leader-map
   ;; generic keybindings
-  ";"   'execute-extended-command 
+  ";"   'execute-extended-command
   "SPC" 'projectile-find-file
   "."   'find-file
   ","   'persp-switch-to-buffer
   "TAB" 'perspective-map
   "p"   'projectile-command-map
   "d"   'duplicate-line
-  "c"   'copy-from-above-command
+  "y"   'copy-from-above-command
+  "c"   'compile
 
   ;; files
   "f" '(:ignore t :which-key "files")

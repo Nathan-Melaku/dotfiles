@@ -18,6 +18,15 @@
   (setq avy-timeout-seconds 0.3))
 
 (use-package vterm)
+(use-package eat
+  :straight '(eat :type git
+                  :host codeberg
+                  :repo "akib/emacs-eat"
+                  :files ("*.el" ("term" "term/*.el") "*.texi"
+                          "*.ti" ("terminfo/e" "terminfo/e/*")
+                          ("terminfo/65" "terminfo/65/*")
+                          ("integration" "integration/*")
+                          (:exclude ".dir-locals.el" "*-tests.el"))))
 
 (use-package ace-window
   :config
