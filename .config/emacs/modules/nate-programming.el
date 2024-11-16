@@ -157,7 +157,12 @@
 ;;==== LANGUAGES =======;;
 
 ;; lisp
-(use-package paredit)
+(use-package paredit
+  :config
+  :hook
+  (lisp-mode . paredit-mode)
+  (lisp-interaction-mode . paredit-mode)
+  (emacs-lisp-mode . paredit-mode))
 
 ;;java
 (use-package eglot-java
