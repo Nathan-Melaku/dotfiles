@@ -7,7 +7,7 @@
   (other-window 1)
   (eat))
 
-(global-unset-key (kbd "M-SPC"))
+
 (use-package general
   :config
   (defconst nate-leader "M-SPC")

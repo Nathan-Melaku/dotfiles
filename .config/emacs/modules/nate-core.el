@@ -10,7 +10,7 @@
       history-length 25
       use-dialog-box nil
       global-auto-revert-non-file-buffers t)
-
+(global-unset-key (kbd "M-SPC"))
 
 ;; custom vars on my location
 (setq custom-file (locate-user-emacs-file "nate-custom.el"))
