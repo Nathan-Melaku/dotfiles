@@ -7,8 +7,13 @@
 (setq-default tab-width 4)
 ;; ;; set font
 (add-to-list 'default-frame-alist '(font . "JetBrainsMonoNL Nerd Font Mono-18" ))
-(add-to-list 'default-frame-alist '(alpha-background . 95))
+(add-to-list 'default-frame-alist '(alpha-background . 98))
 (blink-cursor-mode -1)
+
+(defun nate/fill-column ()
+  (setq fill-column 90)
+  (display-fill-column-indicator-mode ))
+(add-hook 'prog-mode-hook #'nate/fill-column)
 
 (defun nate/transparent ()
   (interactive)
@@ -20,11 +25,21 @@
   :config
   (load-theme 'doom-palenight t))
 
-(use-package mood-line
+(use-package minions
+  :config (minions-mode 1))
+
+(use-package moody
   :config
-  (mood-line-mode)
-  :custom
-  (mood-line-glyph-alist mood-line-glyphs-unicode))
+  (moody-replace-mode-line-front-space)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode)
+  (setq x-underline-at-descent-line t))
+
+;; (use-package mood-line
+;;   :config
+;;   (mood-line-mode)
+;;   :custom
+;;   (mood-line-glyph-alist mood-line-glyphs-unicode))
 
 (use-package vertico-posframe
   :config

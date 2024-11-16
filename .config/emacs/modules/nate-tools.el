@@ -33,10 +33,19 @@
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   :bind ("M-o" . 'ace-window))
 
-;; Dired mode 
+;; Dired mode
+(use-package dired
+  :ensure nil
+  :straight nil
+  :hook (dired-mode . dired-omit-mode)
+  :bind (:map dired-mode-map
+              ( "."     . dired-omit-mode))
+  :custom
+  (dired-omit-files "\\`[.].*")
+  (dired-listing-switches "-alh -v --group-directories-first"))
+
 (use-package dired+
   :config
-  (setq dired-listing-switches "-alh -v --group-directories-first")
   (require 'dired+))
 
 (use-package dired-single)
@@ -92,8 +101,10 @@
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
         ("C-x t M-t" . treemacs-find-tag)))
+
 (use-package treemacs-projectile
   :after (treemacs projectile))
+
 (use-package treemacs-magit)
 
 (use-package exec-path-from-shell)
@@ -113,11 +124,30 @@
 (defun indent-region-advice (&rest ignored)
   (let ((deactivate deactivate-mark))
     (if (region-active-p)
-		(indent-region (region-beginning) (region-end))
+        (indent-region (region-beginning) (region-end))
       (indent-region (line-beginning-position) (line-end-position)))
     (setq deactivate-mark deactivate)))
 
 (advice-add 'move-text-up :after 'indent-region-advice)
 (advice-add 'move-text-down :after 'indent-region-advice)
+
+;; define a hydra for moving text
+(use-package hydra)
+
+(defhydra nate-hydra/move-text (global-map "M-SPC m")
+  "move region/line using a hydra.
+
+The heads for the associated hydra are:
+
+\"n\": `move region down'
+\"p\": `move region up'
+\"N\": `move line down'
+\"P\": `move line up'
+
+This can be accessed via nate-hydra/move-text, which is bound to \"M-SPC m\" "
+  ("p" move-text-region-up)
+  ("n" move-text-region-down)
+  ("P" move-text-up)
+  ("N" move-text-down))
 
 (provide 'nate-tools)

@@ -1,4 +1,5 @@
 ;; nate-org.el
+(use-package verb)
 
 (use-package org
   :ensure nil

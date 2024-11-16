@@ -20,9 +20,27 @@
   :config
   (global-set-key (kbd "C-=") 'er/expand-region))
 
-;; ts-fold
-(use-package ts-fold
-  :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold"))
+(use-package hl-todo
+  :hook ((org-mode . hl-todo-mode)
+         (prog-mode . hl-todo-mode))
+  :config
+  (setq hl-todo-highlight-punctuation ":"
+        hl-todo-keyword-faces
+        `(("TODO"       warning bold)
+          ("FIXME"      error bold)
+          ("HACK"       font-lock-constant-face bold)
+          ("REVIEW"     font-lock-keyword-face)
+          ("NOTE"       success bold)
+          ("DEPRECATED" font-lock-doc-face bold))))
+
+;; enable hs-mode in prog-mode-hook
+(defun nate/enable_hideshow()
+  (interactive)
+  (hs-minor-mode))
+(add-hook 'prog-mode-hook #'nate/enable_hideshow)
+
+(use-package rainbow-mode
+  :hook org-mode prog-mode)
 
 ;; project management
 (use-package projectile
@@ -85,6 +103,15 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
+;; folding backed by treesit
+(use-package treesit-fold
+  :straight (treesit-fold :type git :host github :repo "emacs-tree-sitter/treesit-fold")
+  :config
+  (global-treesit-fold-mode 1)
+  (global-treesit-fold-indicators-mode 1)
+  (treesit-fold-line-comment-mode 1)
+  (setq treesit-fold-indicators-priority 100))
+
 ;; lsp
 (use-package eglot
   :ensure nil
@@ -100,17 +127,43 @@
   (add-to-list 'eglot-server-programs
                '(scala-ts-mode . ("metals" :initializationOptions
                                   (:sbtScript "/home/nathan/.local/share/coursier/bin/sbt"))))
+  (add-to-list 'eglot-server-programs
+               '(java-ts-mode . ("jdtls" :initializationOptions
+                                 (:bundles ["/home/nathan/Tools/java-debug-0.53.1/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.53.1.jar"]))))
   (add-to-list 'eglot-server-programs '(svelte-mode . ("svelteserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '(astro-ts-mode . ("astro-ls" "--stdio" :initializationOptions
                                   (:typescript (:tsdk "./node_modules/typescript/lib"))))))
+
+(use-package dape
+  :preface
+  (setq dape-key-prefix "\M-n\M-d")
+  :config
+  (setq dape-buffer-window-arrangement 'gud)
+  (setq dape-inlay-hint t))
 
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'astro-ts-mode-hook 'eglot-ensure)
 (add-hook 'svelte-mode-hook 'eglot-ensure)
 
+;; combobulate treesitter based magic
+(use-package combobulate
+  :custom
+  (combobulate-key-prefix "C-c o")
+  :hook ((prog-mode . combobulate-mode))
+  :load-path (lambda () (expand-file-name "combobulate.el" (straight--repos-dir "combobulate"))))
+
 ;;==== LANGUAGES =======;;
+
+;; lisp
+(use-package paredit)
+
+;;java
+(use-package eglot-java
+  :hook (java-ts-mode . eglot-java-mode)
+  :config
+  (add-hook 'java-ts-mode-hook (lambda () (subword-mode))))
 
 ;; markdown
 (use-package markdown-mode

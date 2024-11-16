@@ -32,6 +32,14 @@
   ;; search
   "s" 'avy-goto-char-timer
 
+  ;; toggle
+  "t" '(:ignore t :which-key "toggle")
+  "t f" '(treesit-fold-toggle :which-key "toggle folding")
+
+  ;; Open
+  "o" '(:ignore t :which-key "open")
+  "o t" '(nate/spawn-eat :which-key "open terminal below")
+
   ;; buffer related binding
   "b" '(:ignore t :which-key "buffer")
   "b k" 'kill-buffer
@@ -48,12 +56,11 @@
 ;; Eglot mode binding
 (with-eval-after-load 'eglot
   (nate-leader-map
-	"l" '(:ignore t :which-key "lsp")
-	"l f" 'eglot-format
-	"l r" 'eglot-rename
-	"l a" 'eglot-code-actions
-	"l o" 'eglot-code-action-organize-imports)))
-
+    "l" '(:ignore t :which-key "lsp")
+    "l f" 'eglot-format
+    "l r" 'eglot-rename
+    "l a" 'eglot-code-actions
+    "l o" 'eglot-code-action-organize-imports)))
 
 ;; Dired mode bindings
 (with-eval-after-load 'dired
