@@ -9,7 +9,8 @@
       make-backup-files nil
       history-length 25
       use-dialog-box nil
-      global-auto-revert-non-file-buffers t)
+      global-auto-revert-non-file-buffers t
+      auth-sources '("~/.authinfo.gpg"))
 (global-unset-key (kbd "M-SPC"))
 
 ;; custom vars on my location

@@ -3,8 +3,25 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-;; Git with Magic
+;; Git
 (use-package magit)
+;; forge for github stuff
+(use-package forge
+  :after magit)
+
+;; git blame
+(use-package blamer
+  ;;  :straight (:host github :repo "artawower/blamer.el")
+
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 70)
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                   :background nil
+                   :height 140
+                   :italic t))))
+;; diff highlight marks on the gutter
 
 (use-package diff-hl
   :config
