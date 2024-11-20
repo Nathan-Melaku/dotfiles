@@ -1,13 +1,5 @@
 ;; nate-keybindings.el
 
-(defun nate/spawn-eat ()
-  "open an eat shell below the given window"
-  (interactive)
-  (split-window-below)
-  (other-window 1)
-  (eat))
-
-
 (use-package general
   :config
   (defconst nate-leader "M-SPC")
@@ -29,16 +21,13 @@
   "f" '(:ignore t :which-key "files")
   "f r" '(recentf :which-key "find recent files")
 
-  ;; search
-  "s" 'avy-goto-char-timer
-
   ;; toggle
   "t" '(:ignore t :which-key "toggle")
   "t f" '(treesit-fold-toggle :which-key "toggle folding")
 
   ;; Open
   "o" '(:ignore t :which-key "open")
-  "o t" '(nate/spawn-eat :which-key "open terminal below")
+  "o t" '(eat-other-window :which-key "open terminal below")
 
   ;; buffer related binding
   "b" '(:ignore t :which-key "buffer")
@@ -51,6 +40,11 @@
   "n f" 'org-roam-node-find
   "n i" 'org-roam-node-insert
   "n c" 'org-roam-capture
+
+  ;; version control
+  "v" '(:ignore t :which-key "version control")
+  "v v" '(magit :which-key "magit dispatch")
+  "v b" '(blamer-show-posframe-commit-info :which-key "git blame")
   )
 
 ;; Eglot mode binding

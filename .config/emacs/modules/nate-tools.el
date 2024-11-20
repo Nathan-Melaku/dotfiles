@@ -1,5 +1,11 @@
 ;; nate-tools.el
-(use-package undo-tree)
+(use-package undo-tree
+  :config
+  (undo-tree-mode 1)
+  :bind
+  ("C-M-s-?" . undo-tree-undo)
+  ("C-M-s-|" . undo-tree-redo))
+
 ;; help menu
 (use-package which-key
   :config
@@ -11,11 +17,19 @@
   :config
   (eros-mode 1))
 
+(use-package ws-butler
+  :config
+  (ws-butler-global-mode 1))
+
 (use-package avy
   :straight nil
   :ensure nil
   :config
-  (setq avy-timeout-seconds 0.3))
+  (setq avy-timeout-seconds 0.2)
+  :bind
+  ("C-;" . avy-goto-char-timer)
+  ("C-:" . avy-goto-char-2))
+
 (use-package ace-link
   :bind
   (:map org-mode-map
@@ -28,6 +42,25 @@
         ("C-M-s-o" . ace-link-compilation))
   (:map eww-mode-map
         ("C-M-s-o" . ace-link-eww)))
+
+(use-package zzz-to-char
+  :bind ("M-z" . zzz-to-char))
+
+;; Testing fzf and emacs
+(use-package fzf
+  :bind
+  ("C-M-s-SPC f" . fzf-find-file)
+  ("C-M-s-SPC p" . fzf-projectile)
+  ("C-M-s-SPC j" . fzf-grep)
+  :config
+  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+        fzf/executable "fzf"
+        fzf/git-grep-args "-i --line-number %s"
+        fzf/grep-command "rg --no-heading -nH"
+        fzf/grep-command "grep -nrH"
+        ;; If nil, the fzf buffer will appear at the top of the window
+        fzf/position-bottom t
+        fzf/window-height 15))
 
 (use-package vterm)
 (use-package eat
@@ -142,6 +175,30 @@
 
 (advice-add 'move-text-up :after 'indent-region-advice)
 (advice-add 'move-text-down :after 'indent-region-advice)
+
+(use-package bm
+  :demand t
+  :init
+  (setq bm-restore-repository-on-load t)
+  :config
+  ;; Allow cross-buffer 'next'
+  (setq bm-cycle-all-buffers t)
+  (setq bm-repository-file "~/.config/emacs/bm-repository")
+  (setq-default bm-buffer-persistence t)
+  (add-hook 'after-init-hook 'bm-repository-load)
+  (add-hook 'kill-buffer-hook #'bm-buffer-save)
+  (add-hook 'kill-emacs-hook #'(lambda nil
+                                 (bm-buffer-save-all)
+                                 (bm-repository-save)))
+  (add-hook 'after-save-hook #'bm-buffer-save)
+  (add-hook 'find-file-hooks   #'bm-buffer-restore)
+  (add-hook 'after-revert-hook #'bm-buffer-restore)
+  (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
+  (setq bm-marker 'bm-marker-left)
+  :bind
+  (("C-M-s-b n" . bm-next)
+   ("C-M-s-b p" . bm-previous)
+   ("C-M-s-b b" . bm-toggle)))
 
 ;; define a hydra for moving text
 (use-package hydra)

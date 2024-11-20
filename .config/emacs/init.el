@@ -1,5 +1,5 @@
 ;; init.el
-;; bootstrap striaght 
+;; bootstrap striaght
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -18,6 +18,7 @@
 
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+(put 'upcase-region 'disabled nil)
 
 ;; Load custom modules
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))

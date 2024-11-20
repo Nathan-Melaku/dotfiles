@@ -75,7 +75,7 @@
         company-tooltip-align-annotations t
         company-transformers '(company-sort-by-backend-importance)))
 
-;; completion ranking
+;; an awesome completion ranking
 (use-package prescient)
 (use-package company-prescient
   :config
@@ -104,9 +104,15 @@
 (add-hook 'astro-ts-mode-hook (lambda ()
                                 (display-line-numbers-mode)
                                 (setq display-line-numbers 'relative)))
+(use-package eldoc
+  :ensure nil
+  :straight nil
+  :config
+  (setq eldoc-echo-area-prefer-doc-buffer t
+        eldoc-echo-area-use-multiline-p nil))
 
 (use-package eldoc-box
-  :bind ("M-n h" . eldoc-box-help-at-point)
+  :bind ("M-SPC h e" . eldoc-box-help-at-point)
   :config
   (custom-set-faces
    '(eldoc-box-body
@@ -152,6 +158,11 @@
                '(astro-ts-mode . ("astro-ls" "--stdio" :initializationOptions
                                   (:typescript (:tsdk "./node_modules/typescript/lib"))))))
 
+(use-package eglot-booster
+  :straight `(:type git :host github :repo "jdtsmith/eglot-booster")
+  :config
+  (eglot-booster-mode))
+
 (use-package dape
   :preface
   (setq dape-key-prefix "\M-n\M-d")
@@ -181,16 +192,38 @@
   (lisp-interaction-mode . paredit-mode)
   (emacs-lisp-mode . paredit-mode))
 
-;;java
+;; Clojure
+(use-package clojure-ts-mode)
+(use-package cider)
+(use-package clojure-snippets)
+(use-package clj-refactor
+  :hook
+  (clojure-mode . (lambda () (clr-add-keybindings-with-prefix "C-c C-m"))))
+
+;; java
 (use-package eglot-java
   :hook (java-ts-mode . eglot-java-mode)
   :config
   (add-hook 'java-ts-mode-hook (lambda () (subword-mode))))
 
+;; Zig
+(use-package zig-mode)
+
 ;; markdown
 (use-package markdown-mode
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown"))
+
+;; LATEX
+(use-package auctex)
+(use-package latex-preview-pane)
+
+;; docker and kube
+(use-package docker
+  :bind ("C-M-s-SPC o d" . docker))
+
+(use-package kubernetes
+  :bind ("C-M-s-SPC o k" . kubernetes-dispatch))
 
 ;; the web
 (use-package web-mode)
