@@ -16,6 +16,18 @@
   :ensure nil
   :config
   (setq avy-timeout-seconds 0.3))
+(use-package ace-link
+  :bind
+  (:map org-mode-map
+        ("C-M-s-o" . ace-link-org))
+  (:map Info-mode-map
+        ("C-M-s-o" . ace-link-info))
+  (:map help-mode-map
+        ("C-M-s-o" . ace-link-help))
+  (:map compilation-mode-map
+        ("C-M-s-o" . ace-link-compilation))
+  (:map eww-mode-map
+        ("C-M-s-o" . ace-link-eww)))
 
 (use-package vterm)
 (use-package eat
