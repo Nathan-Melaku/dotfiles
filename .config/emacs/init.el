@@ -32,3 +32,4 @@
 (require 'nate-keybindings)
 
 (provide 'init.el)
+(put 'downcase-region 'disabled nil)

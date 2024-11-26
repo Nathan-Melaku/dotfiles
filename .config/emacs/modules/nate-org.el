@@ -9,7 +9,9 @@
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 (use-package org-superstar
-  :hook (org-mode . (lambda () (org-superstar-mode 1))))
+  :hook (org-mode . (lambda () (org-superstar-mode 1)))
+  :config
+  (org-superstar-configure-like-org-bullets))
 
 (use-package org-roam
   :config

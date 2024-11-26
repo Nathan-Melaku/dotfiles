@@ -11,8 +11,6 @@
 
 ;; git blame
 (use-package blamer
-  ;;  :straight (:host github :repo "artawower/blamer.el")
-
   :custom
   (blamer-idle-time 0.3)
   (blamer-min-offset 70)
@@ -21,16 +19,23 @@
                    :background nil
                    :height 140
                    :italic t))))
-;; diff highlight marks on the gutter
 
+;; diff highlight marks on the gutter
 (use-package diff-hl
   :config
   (global-diff-hl-mode))
 
 ;; declutter emacs
 (use-package perspective
+  :bind (("C-x b" . persp-switch-to-buffer*)
+         ("C-x k" . persp-kill-buffer*))
+  :hook ((kill-emacs-hook . persp-state-save))
   :init
-  (persp-mode))
+  (persp-mode)
+  :config
+  (setq switch-to-prev-buffer-skip
+        (lambda (win buff bury-or-kill)
+          (not (persp-is-current-buffer buff)))))
 
 ;; expand region
 (use-package expand-region
@@ -163,6 +168,20 @@
   :config
   (eglot-booster-mode))
 
+(use-package sideline
+  :hook ((flymake-mode . sideline-mode))
+  :init
+  (use-package sideline-flymake
+    :init
+    (setq sideline-flymake-display-mode 'line
+          sideline-backends-right '(sideline-flymake)))
+  (setq sideline-backends-left-skip-current-line t
+        sideline-order-left 'down
+        sideline-order-right 'up
+        sideline-format-left "%s   "
+        sideline-format-right "   %s"
+        sideline-priority 100))
+
 (use-package dape
   :preface
   (setq dape-key-prefix "\M-n\M-d")
@@ -174,6 +193,7 @@
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'astro-ts-mode-hook 'eglot-ensure)
 (add-hook 'svelte-mode-hook 'eglot-ensure)
+(add-hook 'zig-mode-hook 'eglot-ensure)
 
 ;; combobulate treesitter based magic
 (use-package combobulate
@@ -226,7 +246,32 @@
   :bind ("C-M-s-SPC o k" . kubernetes-dispatch))
 
 ;; the web
-(use-package web-mode)
+(use-package web-mode
+  :mode
+  (("\\.mustache\\'" . web-mode)
+   ("\\.xhtml\\'" . web-mode))
+  :config
+  (setq web-mode-enable-current-column-highlight t
+        web-mode-enable-current-element-highlight t))
+
+;; web assembly staff
+(use-package wat-ts-mode
+  :straight (:type git :host github :repo "nverno/wat-ts-mode")
+  :mode (("\\.wat\\'" . wat-ts-mode)
+         ("\\.wast\\'". wat-ts-wast-mode)))
+
+;; Load custom jte mode
+(use-package jte-mode
+  :straight (:local-repo "~/Projects/jte-mode/" :host nil :type nil))
+
+(use-package hyprlang-ts-mode
+  :straight (:type git :host github :repo "Nathan-Melaku/hyprlang-ts-mode"))
+
+(use-package emmet-mode
+  :hook ((web-mode . emmet-mode)
+         (html-mode . emmet-mode)
+         (css-ts-mode . emmet-mode)))
+
 (use-package astro-ts-mode)
 (use-package svelte-mode)
 

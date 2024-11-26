@@ -28,7 +28,8 @@
   (setq avy-timeout-seconds 0.2)
   :bind
   ("C-;" . avy-goto-char-timer)
-  ("C-:" . avy-goto-char-2))
+  ("C-:" . avy-goto-char-2)
+  ("C-M-s-f" . avy-goto-char-in-line))
 
 (use-package ace-link
   :bind
@@ -77,6 +78,18 @@
   :config
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   :bind ("M-o" . 'ace-window))
+
+(defun nate/sudo-find-file (file)
+  "Open FILE as root."
+  (interactive "FOpen file as root: ")
+  (when (file-writable-p file)
+    (user-error "File is user writeable, aborting sudo"))
+  (find-file (if (file-remote-p file)
+                 (concat "/" (file-remote-p file 'method) ":"
+                         (file-remote-p file 'user) "@" (file-remote-p file 'host)
+                         "|sudo:root@"
+                         (file-remote-p file 'host) ":" (file-remote-p file 'localname))
+               (concat "/sudo:root@localhost:" file))))
 
 ;; Dired mode
 (use-package dired
@@ -134,6 +147,8 @@
   :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package pdf-tools)
+;; password manager
+(use-package pass)
 
 ;; treemacs
 (use-package treemacs
@@ -219,4 +234,13 @@ This can be accessed via nate-hydra/move-text, which is bound to \"M-SPC m\" "
   ("P" move-text-up)
   ("N" move-text-down))
 
+(use-package elfeed
+  :config
+  (setq elfeed-feeds
+      '(("http://nullprogram.com/feed/" blog emacs)
+        "http://www.50ply.com/atom.xml"  ; no autotagging
+        ("http://nedroid.com/feed/" webcomic)
+        "http://endlessparentheses.com/atom.xml"
+        "https://ziglang.org/news/index.xml"
+        )))
 (provide 'nate-tools)

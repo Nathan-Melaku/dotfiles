@@ -71,6 +71,7 @@
     "Function for `switch-to-prev-buffer-skip'."
     (string-match "\\*[^*]+\\*" (buffer-name buffer)))
   (setq switch-to-prev-buffer-skip 'skip-these-buffers)
+  (winner-mode 1)
   :init
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
@@ -84,7 +85,9 @@
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  :bind
+  ("C-x C-b" . ibuffer))
 
 (use-package window
   :ensure nil
@@ -123,16 +126,19 @@
   (setq
     whitespace-style '(face tabs tab-mark spaces space-mark trailing newline newline-mark)
     whitespace-display-mappings '(
-      (space-mark   ?\     [?\u00B7]     [?.])
+   ;;   (space-mark   ?\     [?\u00B7]     [?.])
       (space-mark   ?\xA0  [?\u00A4]     [?_])
       (tab-mark     ?\t    [?\u00BB ?\t] [?\\ ?\t])))
   (setq whitespace-global-modes '(prog-mode))
   (global-whitespace-mode 1))
 
+;; rg for searching
+(use-package rg)
+
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
   :bind (:map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
+              ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode))
 
@@ -150,14 +156,7 @@
          ("C-c m" . consult-man)
          ("C-c i" . consult-info)
          ([remap Info-search] . consult-info)
-         ;; C-x bindings in `ctl-x-map'
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+
          ;; Custom M-# bindings for fast register access
          ("M-#" . consult-register-load)
          ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
@@ -194,7 +193,8 @@
          ;; Minibuffer history
          :map minibuffer-local-map
          ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+         )
+  ("M-r" . consult-history)                ;; orig. previous-matching-history-element
   :hook (completion-list-mode . consult-preview-at-point-mode)
   :init
   (setq register-preview-delay 0.5
@@ -211,5 +211,15 @@
    consult--source-recent-file consult--source-project-recent-file
    :preview-key '(:debounce 0.4 any))
   (setq consult-narrow-key "<") ;; "C-+"
-)
+  )
+
+(use-package embark
+  :bind
+  (("C-." . embark-act)
+   ("C-," . embark-dwim)
+   ("C-h B" . embark-bindings)))
+(use-package embark-consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
 (provide 'nate-core)
