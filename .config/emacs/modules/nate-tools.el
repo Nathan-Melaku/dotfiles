@@ -234,13 +234,24 @@ This can be accessed via nate-hydra/move-text, which is bound to \"M-SPC m\" "
   ("P" move-text-up)
   ("N" move-text-down))
 
+(use-package helpful
+  :config
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-h x") #'helpful-command)
+  (global-set-key (kbd "C-h C-d") #'helpful-at-point)
+  (global-set-key (kbd "C-h F") #'helpful-function))
+
 (use-package elfeed
   :config
   (setq elfeed-feeds
-      '(("http://nullprogram.com/feed/" blog emacs)
-        "http://www.50ply.com/atom.xml"  ; no autotagging
-        ("http://nedroid.com/feed/" webcomic)
-        "http://endlessparentheses.com/atom.xml"
-        "https://ziglang.org/news/index.xml"
-        )))
+        '(("http://nullprogram.com/feed/" blog emacs)
+          "http://www.50ply.com/atom.xml" ; no autotagging
+          ("http://nedroid.com/feed/" webcomic)
+          "http://endlessparentheses.com/atom.xml"
+          "https://ziglang.org/news/index.xml"
+          "https://news.ycombinator.com/rss"
+          "https://lobste.rs/rss"
+          )))
 (provide 'nate-tools)
