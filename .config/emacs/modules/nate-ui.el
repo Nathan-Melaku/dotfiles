@@ -17,13 +17,23 @@
 
 (defun nate/transparent ()
   (interactive)
-(set-face-attribute 'default nil :font "JetBrainsMonoNL Nerd Font Mono" :height 150)
-(set-frame-parameter nil 'alpha-background 95))
+  (set-face-attribute 'default nil :font "JetBrainsMonoNL Nerd Font Mono" :height 150)
+  (set-frame-parameter nil 'alpha-background 95))
 
 ;; Theme
 (use-package doom-themes
   :config
-  (load-theme 'doom-snazzy t))
+  (load-theme 'doom-moonlight t))
+
+(use-package nerd-icons)
+(use-package nerd-icons-corfu
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
 (use-package minions
   :config (minions-mode 1))
@@ -45,12 +55,15 @@
 (use-package pulsar
   :bind (("M-SPC t p" . pulsar-pulse-line)
          ("M-SPC t P" . pulsar-highlight-line))
+  :hook ((consult-after-jump-hook . pulsar-recenter-top)
+         (consult-after-jump-hook . pulsar-reveal-entry)
+         (next-error-hook . pulsar-pulse-line)
+         (minibuffer-setup-hook . pulsar-pulse-line))
   :config
   (setq pulsar-pulse t
         pulsar-dely 0.08
         pulsar-iterations 10
         pulsar-face 'pulsar-cyan
-        pulsar-highlight-face 'pulsar-yellow)
-  (pulsar-global-mode 1))
+        pulsar-highlight-face 'pulsar-yellow))
 
 (provide 'nate-ui)
