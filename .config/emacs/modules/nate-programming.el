@@ -2,6 +2,10 @@
 ;; ui
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+;; code formatting
+(use-package apheleia
+  :config
+  (apheleia-global-mode t))
 
 ;; Git
 (use-package magit)
@@ -70,21 +74,13 @@
   :init
   (projectile-mode +1)
   :config
-  (setq projectile-project-search-path '("~/Projects/")))
-
-;; completion
-(use-package company
-  :hook (after-init . global-company-mode)
-  :config
-  (setq company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.1))
-        company-tooltip-align-annotations t
-        company-transformers '(company-sort-by-backend-importance)))
+  (setq projectile-project-search-path '("~/Projects/"
+                                         "~/Projects/oss-contrib/"
+                                         "~/Projects/tryouts/zig/"
+                                         "~/Projects/emacs/")))
 
 ;; an awesome completion ranking
 (use-package prescient)
-(use-package company-prescient
-  :config
-  (company-prescient-mode 1))
 
 ;; snippets
 (use-package yasnippet
@@ -146,18 +142,11 @@
   :straight nil
   :config
   (setq eglot-extend-to-xref t)
-  (add-hook 'eglot-managed-mode-hook
-            (lambda ()
-              (add-to-list 'company-backends
-                           '(company-capf :with company-yasnippet))
-              (add-to-list 'company-backends
-                           '(company-capf :with company-files))))
   (add-to-list 'eglot-server-programs
                '(scala-ts-mode . ("metals" :initializationOptions
                                   (:sbtScript "/home/nathan/.local/share/coursier/bin/sbt"))))
   (add-to-list 'eglot-server-programs
-               '(java-ts-mode . ("jdtls" :initializationOptions
-                                 (:bundles ["/home/nathan/Tools/java-debug-0.53.1/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.53.1.jar"]))))
+               '(java-ts-mode . ("jdtls")))
   (add-to-list 'eglot-server-programs '(svelte-mode . ("svelteserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '(astro-ts-mode . ("astro-ls" "--stdio" :initializationOptions
@@ -203,7 +192,7 @@
   :load-path (lambda () (expand-file-name "combobulate.el" (straight--repos-dir "combobulate"))))
 
 ;;==== LANGUAGES =======;;
-
+(global-subword-mode 1)
 ;; lisp
 (use-package paredit
   :config
@@ -211,6 +200,11 @@
   (lisp-mode . paredit-mode)
   (lisp-interaction-mode . paredit-mode)
   (emacs-lisp-mode . paredit-mode))
+
+;; elisp
+(use-package package-lint)
+(use-package package-lint-flymake)
+(use-package eask-mode)
 
 ;; Clojure
 (use-package clojure-ts-mode)
@@ -224,7 +218,18 @@
 (use-package eglot-java
   :hook (java-ts-mode . eglot-java-mode)
   :config
-  (add-hook 'java-ts-mode-hook (lambda () (subword-mode))))
+  (setq eglot-java-user-init-opts-fn 'custom-eglot-java-init-opts)
+  (defun custom-eglot-java-init-opts (server eglot-java-eclipse-jdt)
+    "Custom options that will be merged with any default settings."
+    '(:bundles: ["/home/nathan/Tools/java-debug-0.53.1/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.53.1.jar"]
+                :settings: (:java (:format (:settings
+                                            (:url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml") :enabled t)))
+                :extendedClientCapabilities (:classFileContentsSupport t))))
+
+
+(use-package gradle-mode)
+(use-package kotlin-ts-mode
+  :mode "\\.kt\\'")
 
 ;; Zig
 (use-package zig-mode)
@@ -262,7 +267,7 @@
 
 ;; Load custom jte mode
 (use-package jte-mode
-  :straight (:local-repo "~/Projects/jte-mode/" :host nil :type nil))
+  :straight (:local-repo "~/Projects/emacs/jte-mode/" :host nil :type nil))
 
 (use-package hyprlang-ts-mode
   :straight (:type git :host github :repo "Nathan-Melaku/hyprlang-ts-mode"))

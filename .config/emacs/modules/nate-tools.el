@@ -142,9 +142,14 @@
                 "\\)"))
   ;; (dired-preview-global-mode 1)
   )
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+(use-package nerd-icons-completion
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 (use-package pdf-tools)
 ;; password manager
@@ -166,6 +171,10 @@
   :after (treemacs projectile))
 
 (use-package treemacs-magit)
+
+(use-package treemacs-nerd-icons
+  :config
+  (treemacs-load-theme "nerd-icons"))
 
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
@@ -253,5 +262,15 @@ This can be accessed via nate-hydra/move-text, which is bound to \"M-SPC m\" "
           "https://ziglang.org/news/index.xml"
           "https://news.ycombinator.com/rss"
           "https://lobste.rs/rss"
+          ("https://www.openmymind.net/atom.xml" zig)
           )))
+
+(use-package erc
+  :config
+  (setq erc-nick "cybass")
+  (defun freenode-serv ()
+    (interactive)
+    (erc-tls :server "irc.libera.chat"
+         :port   "6697")))
+
 (provide 'nate-tools)

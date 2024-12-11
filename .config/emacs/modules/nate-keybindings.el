@@ -1,4 +1,12 @@
 ;; nate-keybindings.el
+
+(defun nate/toggle-fold ()
+  "Fold using either hs mod or treesit-fold mode"
+  (interactive)
+  (cond ((treesit-fold-mode) (treesit-fold-toggle))
+        ((hs-minor-mode) (hs-toggle-hiding))
+        "Both treesit fold and hs minor mode are not enabled in this buffer"))
+
 ;; scroll
 (global-set-key (kbd "C-M-s-n") #'pixel-scroll-up)
 (global-set-key (kbd "C-M-s-p") #'pixel-scroll-down)
@@ -42,7 +50,7 @@
 
     ;; toggle
     "t" '(:ignore t :which-key "toggle")
-    "t f" '(treesit-fold-toggle :which-key "toggle folding")
+    "t f" '(nate/toggle-fold :which-key "toggle folding")
 
     ;; version control
     "v" '(:ignore t :which-key "version control")
@@ -72,4 +80,5 @@
    "l" 'dired-single-buffer
    "h" 'dired-single-up-directory))
 
+(pulsar-global-mode 1)
 (provide 'nate-keybindings)

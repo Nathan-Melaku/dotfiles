@@ -20,10 +20,10 @@
 ;; Enable vertico
 (use-package vertico
   :custom
-   (vertico-scroll-margin 0)
-   (vertico-count 20)
-   (vertico-resize t)
-   (vertico-cycle t)
+  (vertico-scroll-margin 0)
+  (vertico-count 20)
+  (vertico-resize t)
+  (vertico-cycle t)
   :init
   (vertico-mode))
 
@@ -66,7 +66,12 @@
   (use-dialog-box nil)
   (use-short-answers t)
   (warning-minimum-level :emergency)
+  ;; compilation mode tweeks
+  (compilation-scroll-ouptput t)
+  (compilation-auto-jump-to-first-error t)
+  (compilation-max-output-line-length nil)
   :config
+  (setopt compilation-ask-about-save nil)
   (defun skip-these-buffers (_window buffer _bury-or-kill)
     "Function for `switch-to-prev-buffer-skip'."
     (string-match "\\*[^*]+\\*" (buffer-name buffer)))
@@ -94,29 +99,29 @@
   :straight nil
   :custom
   (setq display-buffer-alist
-   '(
-     ("\\*.*e?shell\\*"
-      (display-buffer-in-side-window)
-      (window-hight . 0.25)
-      (side . bottom)
-      (slot . -1))
+        '(
+          ("\\*.*e?shell\\*"
+           (display-buffer-in-side-window)
+           (window-hight . 0.25)
+           (side . bottom)
+           (slot . -1))
 
-     ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|[Hh]elp\\|Messages\\|Bookmark List\\|Ibuffer\\|Occur\\|eldoc.*\\)\\*"
-      (display-buffer-in-side-window)
-      (window-hight . 0.25)
-      (side . bottom)
+          ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|[Hh]elp\\|Messages\\|Bookmark List\\|Ibuffer\\|Occur\\|eldoc.*\\)\\*"
+           (display-buffer-in-side-window)
+           (window-hight . 0.25)
+           (side . bottom)
 
-     ("\\*\\(lsp-help\\)\\*"
-      (display-buffer-in-side-window)
-      (window-height . 0.25)
-      (side . bottom)
-      (slot . 0))
-     ("\\*\\(Flymake diagnostics\\|xref\\|ivy\\|Swiper\\|Completions\\)"
-      (display-buffer-in-side-window)
-      (window-height . 0.25)
-      (side . bottom)
-      (slot . 1))  (slot . 0))
-     )))
+           ("\\*\\(lsp-help\\)\\*"
+            (display-buffer-in-side-window)
+            (window-height . 0.25)
+            (side . bottom)
+            (slot . 0))
+           ("\\*\\(Flymake diagnostics\\|xref\\|ivy\\|Swiper\\|Completions\\)"
+            (display-buffer-in-side-window)
+            (window-height . 0.25)
+            (side . bottom)
+            (slot . 1))  (slot . 0))
+          )))
 
 ;; display whitespaces properly
 (use-package whitespace
@@ -124,11 +129,10 @@
   :straight nil
   :config
   (setq
-    whitespace-style '(face tabs tab-mark spaces space-mark trailing newline newline-mark)
-    whitespace-display-mappings '(
-   ;;   (space-mark   ?\     [?\u00B7]     [?.])
-      (space-mark   ?\xA0  [?\u00A4]     [?_])
-      (tab-mark     ?\t    [?\u00BB ?\t] [?\\ ?\t])))
+   whitespace-style '(face tabs tab-mark spaces space-mark trailing newline newline-mark)
+   whitespace-display-mappings '((space-mark   ?\     [?\u00B7]     [?.])
+                                 (space-mark   ?\xA0  [?\u00A4]     [?_])
+                                 (tab-mark     ?\t    [?\u00BB ?\t] [?\\ ?\t])))
   (setq whitespace-global-modes '(prog-mode))
   (global-whitespace-mode 1))
 
@@ -147,54 +151,7 @@
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
-;; Example configuration for Consult
 (use-package consult
-  :bind (;; C-c bindings in `mode-specific-map'
-         ("C-c M-x" . consult-mode-command)
-         ("C-c h" . consult-history)
-         ("C-c k" . consult-kmacro)
-         ("C-c m" . consult-man)
-         ("C-c i" . consult-info)
-         ([remap Info-search] . consult-info)
-
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
-         ("C-M-#" . consult-register)
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-         ;; M-g bindings in `goto-map'
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings in `search-map'
-         ("M-s d" . consult-find)                  ;; Alternative: consult-fd
-         ("M-s c" . consult-locate)
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
-         ;; Minibuffer history
-         :map minibuffer-local-map
-         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         )
-  ("M-r" . consult-history)                ;; orig. previous-matching-history-element
   :hook (completion-list-mode . consult-preview-at-point-mode)
   :init
   (setq register-preview-delay 0.5
@@ -210,8 +167,7 @@
    consult--source-bookmark consult--source-file-register
    consult--source-recent-file consult--source-project-recent-file
    :preview-key '(:debounce 0.4 any))
-  (setq consult-narrow-key "<") ;; "C-+"
-  )
+  (setq consult-narrow-key "<"))
 
 (use-package embark
   :bind
@@ -222,4 +178,46 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package corfu
+  :ensure t
+  :hook (after-init . global-corfu-mode)
+  :bind (:map corfu-map ("<tab>" . corfu-complete))
+  :config
+  (setq tab-always-indent 'complete)
+  (setq corfu-preview-current nil)
+  (setq corfu-min-width 20)
+  (setq corfu-popupinfo-delay '(1.25 . 0.5))
+  (corfu-popupinfo-mode 1) ; shows documentation after `corfu-popupinfo-delay'
+  (global-set-key (kbd "C-M-s-c")(lambda ()
+                                   (interactive)
+                                   (if corfu-auto
+                                       (setq corfu-auto nil)
+                                     (setq corfu-auto t))
+                                   (corfu-mode -1)
+                                   (corfu-mode 1)))
+  ;; Sort by input history (no need to modify `corfu-sort-function').
+  (with-eval-after-load 'savehist
+    (corfu-history-mode 1)
+    (add-to-list 'savehist-additional-variables 'corfu-history)))
+
+;; Use Dabbrev with Corfu!
+(use-package dabbrev
+  ;; Swap M-/ and C-M-/
+  :bind (("M-/" . dabbrev-completion)
+         ("C-M-/" . dabbrev-expand))
+  :config
+  (add-to-list 'dabbrev-ignored-buffer-regexps "\\` "))
+
+;; Add extensions for corfu
+(use-package cape
+  :bind ("M-p" . cape-prefix-map)
+  :init
+  (defun cape-dabbrev-dict-keyword ()
+    (cape-wrap-super #'cape-dabbrev #'cape-dict #'cape-keyword))
+  (add-hook 'completion-at-point-functions #'cape-dabbrev-dict-keyword)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block)
+  (add-hook 'completion-at-point-functions #'cape-history))
+
+(repeat-mode 1)
 (provide 'nate-core)
