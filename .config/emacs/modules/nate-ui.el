@@ -23,7 +23,7 @@
 ;; Theme
 (use-package doom-themes
   :config
-  (load-theme 'doom-moonlight t))
+  (load-theme 'doom-tokyo-night t))
 
 (use-package nerd-icons)
 (use-package nerd-icons-corfu

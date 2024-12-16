@@ -2,10 +2,14 @@
 ;; ui
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
 ;; code formatting
-(use-package apheleia
+(use-package apheleia)
+
+(use-package editorconfig
+  :ensure t
   :config
-  (apheleia-global-mode t))
+  (editorconfig-mode 1))
 
 ;; Git
 (use-package magit)
@@ -68,17 +72,6 @@
 (use-package rainbow-mode
   :hook org-mode prog-mode)
 
-;; project management
-(use-package projectile
-  :ensure t
-  :init
-  (projectile-mode +1)
-  :config
-  (setq projectile-project-search-path '("~/Projects/"
-                                         "~/Projects/oss-contrib/"
-                                         "~/Projects/tryouts/zig/"
-                                         "~/Projects/emacs/")))
-
 ;; an awesome completion ranking
 (use-package prescient)
 
@@ -137,52 +130,87 @@
   (setq treesit-fold-indicators-priority 100))
 
 ;; lsp
-(use-package eglot
-  :ensure nil
-  :straight nil
-  :config
-  (setq eglot-extend-to-xref t)
-  (add-to-list 'eglot-server-programs
-               '(scala-ts-mode . ("metals" :initializationOptions
-                                  (:sbtScript "/home/nathan/.local/share/coursier/bin/sbt"))))
-  (add-to-list 'eglot-server-programs
-               '(java-ts-mode . ("jdtls")))
-  (add-to-list 'eglot-server-programs '(svelte-mode . ("svelteserver" "--stdio")))
-  (add-to-list 'eglot-server-programs
-               '(astro-ts-mode . ("astro-ls" "--stdio" :initializationOptions
-                                  (:typescript (:tsdk "./node_modules/typescript/lib"))))))
-
-(use-package eglot-booster
-  :straight `(:type git :host github :repo "jdtsmith/eglot-booster")
-  :config
-  (eglot-booster-mode))
-
-(use-package sideline
-  :hook ((flymake-mode . sideline-mode))
+(use-package lsp-mode
+  :hook ((c-ts-mode
+          java-ts-mode
+          go-ts-mode
+          zig-mode
+          js-ts-mode
+          typescript-ts-mode
+          web-mode
+          astro-ts-mode
+          tsx-ts-mode) . lsp-deferred)
+  :custom
+  (lsp-keymap-prefix "M-SPC l")
+  (lsp-session-file (expand-file-name ".lsp-session" user-emacs-directory))
+  (lsp-log-io nil)
+  (lsp-keep-workspace-alive nil)
+  (lsp-idle-delay 0.5)
+  (lsp-enable-symbol-highlighting nil)
+  (lsp-enable-text-document-color nil)
+  ;; ;; core
+  (lsp-enable-xref t)
+  ;; headerline
+  (lsp-headerline-breadcrumb-enable nil)
+  (lsp-headerline-breadcrumb-enable-diagnostics nil)
+  (lsp-headerline-breadcrumb-enable-symbol-numbers nil)
+  (lsp-headerline-breadcrumb-icons-enable nil)
   :init
-  (use-package sideline-flymake
-    :init
-    (setq sideline-flymake-display-mode 'line
-          sideline-backends-right '(sideline-flymake)))
-  (setq sideline-backends-left-skip-current-line t
-        sideline-order-left 'down
-        sideline-order-right 'up
-        sideline-format-left "%s   "
-        sideline-format-right "   %s"
-        sideline-priority 100))
+  (setq lsp-idle-delay 0.500))
 
-(use-package dape
-  :preface
-  (setq dape-key-prefix "\M-n\M-d")
+;; lsp booster copied from `https://github.com/blahgeek/emacs-lsp-booster'
+(defun lsp-booster--advice-json-parse (old-fn &rest args)
+  "Try to parse bytecode instead of json."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+(advice-add (if (progn (require 'json)
+                       (fboundp 'json-parse-buffer))
+                'json-parse-buffer
+              'json-read)
+            :around
+            #'lsp-booster--advice-json-parse)
+
+(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster command to lsp CMD."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)                             ;; for check lsp-server-present?
+             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection))  ;; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
+            (setcar orig-result command-from-exec-path))
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+
+(use-package lsp-treemacs
+  :commands lsp-treemacs-errors-list)
+(use-package lsp-ui
+  :commands lsp-ui-mode)
+
+(use-package company
+  :diminish company-mode
+  :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode) . company-mode)
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-tooltip-align-annotations t)
+  (company-require-match 'never)
+  (company-global-modes '(not shell-mode eaf-mode))
+  (company-idle-delay 0.1)
   :config
-  (setq dape-buffer-window-arrangement 'gud)
-  (setq dape-inlay-hint t))
+  (global-company-mode 1))
 
-(add-hook 'go-ts-mode-hook 'eglot-ensure)
-(add-hook 'python-ts-mode-hook 'eglot-ensure)
-(add-hook 'astro-ts-mode-hook 'eglot-ensure)
-(add-hook 'svelte-mode-hook 'eglot-ensure)
-(add-hook 'zig-mode-hook 'eglot-ensure)
+(use-package flycheck
+  :ensure t
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode))
 
 ;; combobulate treesitter based magic
 (use-package combobulate
@@ -203,7 +231,10 @@
 
 ;; elisp
 (use-package package-lint)
-(use-package package-lint-flymake)
+(use-package flycheck-package
+  :after flycheck
+  :config
+  (flycheck-package-setup))
 (use-package eask-mode)
 
 ;; Clojure
@@ -214,18 +245,10 @@
   :hook
   (clojure-mode . (lambda () (clr-add-keybindings-with-prefix "C-c C-m"))))
 
-;; java
-(use-package eglot-java
-  :hook (java-ts-mode . eglot-java-mode)
-  :config
-  (setq eglot-java-user-init-opts-fn 'custom-eglot-java-init-opts)
-  (defun custom-eglot-java-init-opts (server eglot-java-eclipse-jdt)
-    "Custom options that will be merged with any default settings."
-    '(:bundles: ["/home/nathan/Tools/java-debug-0.53.1/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.53.1.jar"]
-                :settings: (:java (:format (:settings
-                                            (:url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml") :enabled t)))
-                :extendedClientCapabilities (:classFileContentsSupport t))))
-
+(setq openjdk-23-path "/home/nathan/.sdkman/candidates/java/17.0.12-graal/bin/java")
+(use-package lsp-java
+  :custom
+  (lsp-java-java-path openjdk-23-path))
 
 (use-package gradle-mode)
 (use-package kotlin-ts-mode
@@ -272,6 +295,12 @@
 (use-package hyprlang-ts-mode
   :straight (:type git :host github :repo "Nathan-Melaku/hyprlang-ts-mode"))
 
+(use-package lsp-tailwindcss
+  :straight (:type git :host github :repo "merrickluo/lsp-tailwindcss")
+  :after lsp-mode
+  :init
+  (setq lsp-tailwindcss-add-on-mode t))
+
 (use-package emmet-mode
   :hook ((web-mode . emmet-mode)
          (html-mode . emmet-mode)
@@ -282,8 +311,7 @@
 
 ;; scala
 (use-package scala-ts-mode
-  :interpreter ("scala3" . scala-ts-mode)
-  :hook (scala-ts-mode . eglot-ensure))
+  :interpreter ("scala3" . scala-ts-mode))
 
 ;; Enable sbt mode for executing sbt commands
 (use-package sbt-mode
@@ -310,5 +338,11 @@
       (with-output-to-temp-buffer "*Revive lint output*"
         (princ output)))))
 ;;(define-key evil-normal-state-map (kbd "SPC g r") 'nate/go-revive-lint)
+
+;; C3
+(use-package c3-ts-mode
+  :straight (:type nil :host nil :local-repo "~/Projects/oss-contrib/c3-ts-mode/")
+  :config
+  (setq c3-ts-mode-indent-offset 4))
 
 (provide 'nate-programming)

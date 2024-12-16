@@ -130,7 +130,7 @@
   :config
   (setq
    whitespace-style '(face tabs tab-mark spaces space-mark trailing newline newline-mark)
-   whitespace-display-mappings '((space-mark   ?\     [?\u00B7]     [?.])
+   whitespace-display-mappings '(;;(space-mark   ?\     [?\u00B7]     [?.])
                                  (space-mark   ?\xA0  [?\u00A4]     [?_])
                                  (tab-mark     ?\t    [?\u00BB ?\t] [?\\ ?\t])))
   (setq whitespace-global-modes '(prog-mode))
@@ -147,9 +147,12 @@
   (marginalia-mode))
 
 (use-package orderless
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion)))))
+  :init
+  ;; Tune the global completion style settings to your liking!
+  ;; This affects the minibuffer and non-lsp completion at point.
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil))
 
 (use-package consult
   :hook (completion-list-mode . consult-preview-at-point-mode)
@@ -178,27 +181,27 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-(use-package corfu
-  :ensure t
-  :hook (after-init . global-corfu-mode)
-  :bind (:map corfu-map ("<tab>" . corfu-complete))
-  :config
-  (setq tab-always-indent 'complete)
-  (setq corfu-preview-current nil)
-  (setq corfu-min-width 20)
-  (setq corfu-popupinfo-delay '(1.25 . 0.5))
-  (corfu-popupinfo-mode 1) ; shows documentation after `corfu-popupinfo-delay'
-  (global-set-key (kbd "C-M-s-c")(lambda ()
-                                   (interactive)
-                                   (if corfu-auto
-                                       (setq corfu-auto nil)
-                                     (setq corfu-auto t))
-                                   (corfu-mode -1)
-                                   (corfu-mode 1)))
-  ;; Sort by input history (no need to modify `corfu-sort-function').
-  (with-eval-after-load 'savehist
-    (corfu-history-mode 1)
-    (add-to-list 'savehist-additional-variables 'corfu-history)))
+;; (use-package corfu
+;;   :ensure t
+;;   :hook (after-init . global-corfu-mode)
+;;   :bind (:map corfu-map ("<tab>" . corfu-complete))
+;;   :config
+;;   (setq tab-always-indent 'complete)
+;;   (setq corfu-preview-current nil)
+;;   (setq corfu-min-width 20)
+;;   (setq corfu-popupinfo-delay '(1.25 . 0.5))
+;;   (corfu-popupinfo-mode 1) ; shows documentation after `corfu-popupinfo-delay'
+;;   (global-set-key (kbd "C-M-s-c")(lambda ()
+;;                                    (interactive)
+;;                                    (if corfu-auto
+;;                                        (setq corfu-auto nil)
+;;                                      (setq corfu-auto t))
+;;                                    (corfu-mode -1)
+;;                                    (corfu-mode 1)))
+;;   ;; Sort by input history (no need to modify `corfu-sort-function').
+;;   (with-eval-after-load 'savehist
+;;     (corfu-history-mode 1)
+;;     (add-to-list 'savehist-additional-variables 'corfu-history)))
 
 ;; Use Dabbrev with Corfu!
 (use-package dabbrev
@@ -209,15 +212,15 @@
   (add-to-list 'dabbrev-ignored-buffer-regexps "\\` "))
 
 ;; Add extensions for corfu
-(use-package cape
-  :bind ("M-p" . cape-prefix-map)
-  :init
-  (defun cape-dabbrev-dict-keyword ()
-    (cape-wrap-super #'cape-dabbrev #'cape-dict #'cape-keyword))
-  (add-hook 'completion-at-point-functions #'cape-dabbrev-dict-keyword)
-  (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions #'cape-elisp-block)
-  (add-hook 'completion-at-point-functions #'cape-history))
+;; (use-package cape
+;;   :bind ("M-p" . cape-prefix-map)
+;;   :init
+;;   (defun cape-dabbrev-dict-keyword ()
+;;     (cape-wrap-super #'cape-dabbrev #'cape-dict #'cape-keyword))
+;;   (add-hook 'completion-at-point-functions #'cape-dabbrev-dict-keyword)
+;;   (add-hook 'completion-at-point-functions #'cape-file)
+;;   (add-hook 'completion-at-point-functions #'cape-elisp-block)
+;;   (add-hook 'completion-at-point-functions #'cape-history))
 
 (repeat-mode 1)
 (provide 'nate-core)

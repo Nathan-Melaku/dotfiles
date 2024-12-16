@@ -19,6 +19,7 @@
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 (put 'upcase-region 'disabled nil)
+(setenv "LSP_USE_PLISTS" "true")
 
 ;; Load custom modules
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))

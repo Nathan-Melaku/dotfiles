@@ -1,4 +1,4 @@
-;; nate-keybindings.el
+;;; nate-keybindings.el
 
 (defun nate/toggle-fold ()
   "Fold using either hs mod or treesit-fold mode"
@@ -19,11 +19,9 @@
   (nate-leader-map
     ;; generic keybindings
     ";"   'execute-extended-command
-    "SPC" 'projectile-find-file
     "."   'find-file
     ","   'persp-switch-to-buffer
     "TAB" 'perspective-map
-    "p"   'projectile-command-map
     "d"   'duplicate-line
     "y"   'copy-from-above-command
     "c"   'compile
@@ -63,13 +61,14 @@
     )
 
   ;; Eglot mode binding
-  (with-eval-after-load 'eglot
-    (nate-leader-map
-      "l" '(:ignore t :which-key "lsp")
-      "l f" 'eglot-format
-      "l r" 'eglot-rename
-      "l a" 'eglot-code-actions
-      "l o" 'eglot-code-action-organize-imports)))
+  ;; (with-eval-after-load 'eglot
+  ;;   (nate-leader-map
+  ;;     "l" '(:ignore t :which-key "lsp")
+  ;;     "l f" 'eglot-format
+  ;;     "l r" 'eglot-rename
+  ;;     "l a" 'eglot-code-actions
+  ;;     "l o" 'eglot-code-action-organize-imports))
+  )
 
 ;; Dired mode bindings
 (with-eval-after-load 'dired

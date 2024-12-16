@@ -1,4 +1,6 @@
 ;; nate-tools.el
+
+(use-package crux)
 (use-package undo-tree
   :config
   (undo-tree-mode 1)
@@ -112,11 +114,11 @@
   "Bunch of stuff to run for dired, either immediately or when it's
    loaded."
   (define-key dired-mode-map [remap dired-find-file]
-    'dired-single-buffer)
+              'dired-single-buffer)
   (define-key dired-mode-map [remap dired-mouse-find-file-other-window]
-    'dired-single-buffer-mouse)
+              'dired-single-buffer-mouse)
   (define-key dired-mode-map [remap dired-up-directory]
-    'dired-single-up-directory))
+              'dired-single-up-directory))
 
 ;; if dired's already loaded, then the keymap will be bound
 (if (boundp 'dired-mode-map)
@@ -178,6 +180,7 @@
 
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
+(add-to-list 'exec-path-from-shell-variables "LSP_USE_PLISTS")
 
 (use-package multiple-cursors
   :bind
@@ -271,6 +274,6 @@ This can be accessed via nate-hydra/move-text, which is bound to \"M-SPC m\" "
   (defun freenode-serv ()
     (interactive)
     (erc-tls :server "irc.libera.chat"
-         :port   "6697")))
+             :port   "6697")))
 
 (provide 'nate-tools)
